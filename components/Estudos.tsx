@@ -7,7 +7,7 @@ import { Bar, Chips, Ring, Sheet, Stepper } from "./ui";
 
 type Props = { state: State; update: (fn: (s: State) => State) => void };
 
-const COLORS = ["#2f7d6d", "#7a62c9", "#2f80c2", "#d27a1e", "#c2507a", "#3d8a4f", "#8a6d3b"];
+const COLORS = ["#c2577f", "#8f6fd6", "#4c9bd6", "#e0794d", "#4f9a75", "#d0679a", "#b08a3e"];
 const GENERAL = "_geral";
 const FOCUS_MIN = [15, 25, 45];
 const BREAK_MIN = [5, 10, 15];

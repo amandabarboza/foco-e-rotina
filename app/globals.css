@@ -3,71 +3,80 @@
 @tailwind utilities;
 
 :root {
-  --bg: #f5f3ee;
+  --bg: #fbf6f4;
   --card: #ffffff;
-  --ink: #23272e;
-  --muted: #6b7280;
-  --accent: #2f7d6d;
+  --ink: #3a2e3f;
+  --muted: #8a7b8f;
+  --accent: #c2577f;
   --accent-ink: #ffffff;
-  --soft: #e4f0eb;
-  --warm: #f8ead0;
-  --line: #e4dfd5;
-  --med: #7a62c9;
-  --med-soft: #eeeafb;
-  --water: #2f80c2;
-  --water-soft: #e3f0fa;
-  --food: #d27a1e;
-  --food-soft: #fbeedd;
-  --study: #3d8a4f;
-  --study-soft: #e5f3e7;
-  --weight: #c2507a;
-  --weight-soft: #f9e6ee;
+  --soft: #fbe7ee;
+  --warm: #fdecd9;
+  --line: #f0e2e6;
+  --med: #8f6fd6;
+  --med-soft: #efe9fb;
+  --water: #4c9bd6;
+  --water-soft: #e5f1fb;
+  --food: #e0794d;
+  --food-soft: #fdeee5;
+  --study: #4f9a75;
+  --study-soft: #e6f4ec;
+  --weight: #d0679a;
+  --weight-soft: #fbe8f1;
+  --hero: linear-gradient(135deg, #f9cddb 0%, #e9d8f8 55%, #fde3d2 100%);
+  --shadow: 0 10px 30px -18px rgba(194, 87, 127, 0.45);
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #15171a;
-    --card: #20242a;
-    --ink: #eceae4;
-    --muted: #9aa0a8;
-    --accent: #6cc0a8;
-    --accent-ink: #0e1f1a;
-    --soft: #1f312b;
-    --warm: #3a3123;
-    --line: #323840;
-    --med: #a995ee;
-    --med-soft: #2b2640;
-    --water: #6db4ec;
-    --water-soft: #1d2d3b;
-    --food: #f0a457;
-    --food-soft: #3a2c1d;
-    --study: #79c98a;
-    --study-soft: #1f3324;
-    --weight: #ec8cb0;
-    --weight-soft: #3a2230;
+    --bg: #1b1520;
+    --card: #261e2b;
+    --ink: #f3e9f0;
+    --muted: #a99bae;
+    --accent: #f08bb0;
+    --accent-ink: #2a1020;
+    --soft: #3a2433;
+    --warm: #3b2c22;
+    --line: #3a2f40;
+    --med: #b9a2f2;
+    --med-soft: #2d2540;
+    --water: #7cbcec;
+    --water-soft: #1d2c3a;
+    --food: #f4a57f;
+    --food-soft: #3a2a22;
+    --study: #8fd0aa;
+    --study-soft: #1f3229;
+    --weight: #f29ac2;
+    --weight-soft: #3a2231;
+    --hero: linear-gradient(135deg, #4a2a40 0%, #33284a 55%, #4a3328 100%);
+    --shadow: 0 10px 30px -18px rgba(0, 0, 0, 0.8);
   }
 }
 
 html, body { background: var(--bg); color: var(--ink); }
 body {
-  font: 17px/1.45 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
-  padding: env(safe-area-inset-top) 16px calc(96px + env(safe-area-inset-bottom));
+  font: 17px/1.45 "Nunito Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  padding: env(safe-area-inset-top) 16px calc(112px + env(safe-area-inset-bottom));
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: transparent;
 }
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.rise { animation: rise .35s ease-out both; }
+
 @layer components {
-  .card { @apply my-3 rounded-[20px] border border-line bg-card p-[18px] shadow-[0_1px_2px_rgba(0,0,0,.04)]; }
+  .card { @apply my-3 rounded-[24px] border border-line bg-card p-[18px]; box-shadow: var(--shadow); }
+  .hero { background: var(--hero); }
   .btn {
-    @apply mt-3 flex min-h-[54px] w-full items-center justify-center gap-2 rounded-2xl border-0 bg-accent px-4 font-semibold text-accent-ink transition active:scale-[.98] disabled:opacity-40;
+    @apply mt-3 flex min-h-[54px] w-full items-center justify-center gap-2 rounded-full border-0 bg-accent px-5 font-bold text-accent-ink transition active:scale-[.98] disabled:opacity-40;
+    box-shadow: 0 8px 20px -12px var(--accent);
   }
-  .btn-secondary { @apply border-2 border-line bg-transparent text-ink; }
+  .btn-secondary { @apply border-2 border-line bg-card text-ink; box-shadow: none; }
   .btn-small { @apply mr-1.5 mt-1.5 inline-flex min-h-[44px] w-auto px-4 text-[.95rem]; }
   .pill { @apply rounded-full bg-soft px-3 py-0.5 text-sm; }
-  .field { @apply min-h-[50px] w-full rounded-xl border-2 border-line bg-bg px-3 text-ink; }
-  .label { @apply mt-4 block text-[.95rem] font-semibold; }
-  .h1 { @apply text-[1.7rem] font-bold leading-tight; }
-  .h2 { @apply mb-1 mt-7 flex items-center gap-2 text-lg font-bold; }
+  .field { @apply min-h-[50px] w-full rounded-2xl border-2 border-line bg-bg px-4 text-ink; }
+  .label { @apply mt-4 block text-[.95rem] font-bold; }
+  .h1 { @apply text-[1.8rem] font-extrabold leading-tight tracking-tight; }
+  .h2 { @apply mb-1 mt-7 flex items-center gap-2 text-lg font-extrabold; }
   .muted { @apply text-sm text-muted; }
 }

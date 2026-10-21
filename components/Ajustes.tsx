@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import { Bell, CalendarPlus, Download, Droplet, Pill, RotateCcw, Smartphone, Upload } from "lucide-react";
+import { Bell, CalendarHeart, CalendarPlus, Download, Droplet, Pill, RotateCcw, Smartphone, Upload } from "lucide-react";
 import { State, buildICS, buildWaterICS, download, emptyState } from "@/lib/store";
 import { Chips } from "./ui";
+import { RevisaoSheet } from "./Revisao";
 
 type Props = { state: State; replaceAll: (s: State) => void; update: (fn: (s: State) => State) => void };
 
 export default function Ajustes({ state, replaceAll, update }: Props) {
   const [perm, setPerm] = useState("…");
+  const [review, setReview] = useState(false);
   const [wFrom, setWFrom] = useState("08:00");
   const [wTo, setWTo] = useState("22:00");
   const [wEvery, setWEvery] = useState(2);
@@ -87,6 +89,8 @@ export default function Ajustes({ state, replaceAll, update }: Props) {
         </ol>
       </div>
 
+      <button className="btn btn-secondary" onClick={() => setReview(true)}><CalendarHeart size={18} /> Revisão da semana</button>
+      {review && <RevisaoSheet state={state} update={update} onClose={() => setReview(false)} />}
       <button className="btn btn-secondary" onClick={() => update((s) => ({ ...s, onboarded: false }))}>
         <RotateCcw size={18} /> Refazer o passo a passo inicial
       </button>

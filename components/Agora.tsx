@@ -1,8 +1,16 @@
-import { BookOpen, Check, Droplet, Pill, Scale, Utensils, House as HouseIcon, ChevronRight } from "lucide-react";
+"use client";
+
+import { useState } from "react";
+import { BatteryLow, BookOpen, Check, ChevronRight, Droplet, House as HouseIcon, Pill, Rocket, Scale, Target, Utensils, Wind } from "lucide-react";
 import { REPEAT_MIN, State, dayKey, dayTotals, latestKg, nextPending, nextTask, todayDoses, todayTasks, weekStudy } from "@/lib/store";
 import { plan, waterGoal } from "@/lib/body";
 import Hoje from "./Hoje";
 import { Ring, fmtNum } from "./ui";
+import Arranque from "./Arranque";
+import CabecaCard from "./Cabeca";
+import Calma from "./Calma";
+import Conquistas from "./Conquistas";
+import { RevisaoCard, weekFocus } from "./Revisao";
 
 export type Tab = "inicio" | "rotina" | "estudos" | "corpo" | "ajustes";
 
@@ -21,12 +29,25 @@ function greeting() {
   return h < 5 ? "Boa noite" : h < 12 ? "Bom dia" : h < 18 ? "Boa tarde" : "Boa noite";
 }
 
+const PHRASES = [
+  "Um passo de cada vez já é muito.",
+  "Feito é melhor que perfeito.",
+  "Você não precisa dar conta de tudo hoje.",
+  "Pequeno também conta.",
+  "Seu ritmo é o ritmo certo.",
+  "Descansar também é produtivo.",
+];
+
 export default function Inicio({ state, update, mark, snooze, go }: Props) {
+  const [arranque, setArranque] = useState(false);
+  const [calma, setCalma] = useState(false);
   const today = dayKey();
   const low = !!state.lowEnergy[today];
   const name = state.profile?.name?.trim();
   const rawDate = new Date().toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "long" });
   const date = rawDate.charAt(0).toUpperCase() + rawDate.slice(1);
+  const phrase = PHRASES[new Date().getDate() % PHRASES.length];
+  const focus = weekFocus(state);
 
   const toggleLow = () =>
     update((s) => {
@@ -38,31 +59,56 @@ export default function Inicio({ state, update, mark, snooze, go }: Props) {
 
   return (
     <>
-      <p className="muted pt-2">{date}</p>
-      <div className="flex items-start justify-between gap-3">
-        <h1 className="h1">{greeting()}{name ? `, ${name}` : ""} 👋</h1>
-      </div>
+      <section className="hero rise -mx-4 rounded-b-[36px] px-5 pb-6 pt-4">
+        <p className="text-sm font-semibold opacity-70">{date}</p>
+        <h1 className="h1 mt-1">{greeting()}{name ? `, ${name}` : ""} 🌷</h1>
+        <p className="mt-1 opacity-80">{phrase}</p>
+        <div className="mt-4 grid grid-cols-2 gap-2">
+          <button onClick={() => setArranque(true)}
+            className="flex min-h-[56px] items-center justify-center gap-2 rounded-2xl bg-card/85 px-3 font-bold shadow-sm backdrop-blur active:scale-[.98]">
+            <Rocket size={20} className="text-accent" /> Só 2 minutos
+          </button>
+          <button onClick={() => setCalma(true)}
+            className="flex min-h-[56px] items-center justify-center gap-2 rounded-2xl bg-card/85 px-3 font-bold shadow-sm backdrop-blur active:scale-[.98]">
+            <Wind size={20} className="text-med" /> Modo calma
+          </button>
+        </div>
+      </section>
+
+      {focus && (
+        <div className="card flex items-center gap-3 !py-3">
+          <Target size={20} className="shrink-0 text-accent" />
+          <p><span className="font-bold">Foco da semana:</span> {focus}</p>
+        </div>
+      )}
+
       <button onClick={toggleLow} aria-pressed={low}
-        className={`mt-3 flex min-h-[48px] w-full items-center gap-3 rounded-2xl px-4 text-left ${low ? "bg-warm" : "border-2 border-dashed border-line"}`}>
-        <span className="text-xl" aria-hidden>🔋</span>
+        className={`mt-3 flex min-h-[52px] w-full items-center gap-3 rounded-[24px] px-4 text-left transition ${low ? "bg-warm" : "border-2 border-dashed border-line"}`}>
+        <BatteryLow size={22} className={low ? "text-food" : "text-muted"} />
         <span className="flex-1">
-          <span className="block font-semibold">{low ? "Modo baixa energia ligado" : "Dia difícil? Ligue o modo baixa energia"}</span>
-          {low && <span className="muted block">Só o essencial hoje. Toque para desligar.</span>}
+          <span className="block font-bold">{low ? "Modo baixa energia ligado" : "Dia difícil? Modo baixa energia"}</span>
+          <span className="muted block">{low ? "Só o essencial hoje. Toque para desligar." : "Mostra só o essencial."}</span>
         </span>
-        <span className={`h-7 w-12 rounded-full p-1 transition ${low ? "bg-accent" : "bg-line"}`}>
-          <span className={`block h-5 w-5 rounded-full bg-card transition ${low ? "translate-x-5" : ""}`} />
+        <span className={`h-7 w-12 shrink-0 rounded-full p-1 transition ${low ? "bg-accent" : "bg-line"}`}>
+          <span className={`block h-5 w-5 rounded-full bg-card shadow transition ${low ? "translate-x-5" : ""}`} />
         </span>
       </button>
 
       <NowCard state={state} update={update} mark={mark} snooze={snooze} go={go} />
+      <CabecaCard state={state} update={update} />
       <Tiles state={state} update={update} go={go} />
+      <RevisaoCard state={state} update={update} />
+      <Conquistas state={state} onStart={() => setArranque(true)} />
 
       <details className="card">
-        <summary className="flex min-h-[32px] cursor-pointer items-center justify-between font-semibold">
+        <summary className="flex min-h-[32px] cursor-pointer items-center justify-between font-bold">
           Meu dia completo <ChevronRight size={18} />
         </summary>
         <Hoje state={state} update={update} mark={mark} />
       </details>
+
+      {arranque && <Arranque state={state} update={update} onClose={() => setArranque(false)} />}
+      {calma && <Calma onClose={() => setCalma(false)} />}
     </>
   );
 }

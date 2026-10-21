@@ -1,4 +1,4 @@
-const CACHE = "foco-e-rotina-v3";
+const CACHE = "foco-e-rotina-v4";
 const FILES = ["/", "/manifest.webmanifest", "/icons/icon-192.png", "/icons/icon-512.png", "/icons/icon-180.png"];
 
 self.addEventListener("install", (e) => {

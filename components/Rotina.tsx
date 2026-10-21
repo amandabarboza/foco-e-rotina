@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { Med, State, Task, uid } from "@/lib/store";
+import { Scissors } from "lucide-react";
+import { Med, State, Task, dayKey, uid } from "@/lib/store";
+import Quebrar from "./Quebrar";
 import Remedios from "./Remedios";
 
 type Props = {
@@ -58,7 +60,7 @@ function Tarefas({ state, update }: Pick<Props, "state" | "update">) {
     const save = () => {
       const name = editing.name.trim();
       if (!name) return alert("Dê um nome para a tarefa.");
-      if (!editing.days.length) return alert("Escolha pelo menos um dia.");
+      if (!editing.once && !editing.days.length) return alert("Escolha pelo menos um dia.");
       const { stepsText, ...rest } = editing;
       const task: Task = { ...rest, name, steps: stepsText.split("\n").map((s) => s.trim()).filter(Boolean) };
       update((s) => ({
@@ -77,6 +79,13 @@ function Tarefas({ state, update }: Pick<Props, "state" | "update">) {
           <textarea id="t-steps" rows={5} className="field py-2" value={editing.stepsText}
             onChange={(e) => set({ stepsText: e.target.value })} placeholder={"Juntar os pratos\nEnsaboar\nEnxaguar"} />
           <p className="text-sm text-muted">Passos pequenos ajudam a começar. Pode deixar vazio.</p>
+          {editing.once ? (
+            <>
+              <label className="label" htmlFor="t-once">Dia</label>
+              <input id="t-once" type="date" className="field" value={editing.once} onChange={(e) => set({ once: e.target.value })} />
+            </>
+          ) : (
+            <>
           <label className="mt-3 block text-[.95rem] font-semibold">Dias</label>
           <div className="mt-2 grid grid-cols-7 gap-1">
             {DAYS.map((d, i) => (
@@ -86,6 +95,8 @@ function Tarefas({ state, update }: Pick<Props, "state" | "update">) {
               </button>
             ))}
           </div>
+            </>
+          )}
           <label className="mt-3 block text-[.95rem] font-semibold" htmlFor="t-time">Horário (opcional)</label>
           <div className="flex gap-2">
             <input id="t-time" type="time" className="field" value={editing.time} onChange={(e) => set({ time: e.target.value })} />
@@ -111,17 +122,27 @@ function Tarefas({ state, update }: Pick<Props, "state" | "update">) {
     );
   }
 
+  const [breaking, setBreaking] = useState(false);
   const unused = TEMPLATES.filter((tpl) => !state.tasks.some((t) => t.name === tpl.name));
+  const today = dayKey();
+  const visible = state.tasks.filter((t) => !t.once || t.once >= today);
   return (
     <>
-      {!state.tasks.length && <div className="card"><p>Nenhuma tarefa ainda. Comece por um modelo abaixo ou crie a sua.</p></div>}
-      {state.tasks.map((t) => (
+      <button onClick={() => setBreaking(true)} className="card hero mt-4 flex w-full items-center gap-3 border-0 text-left">
+        <Scissors size={22} className="shrink-0 text-accent" />
+        <span><span className="block font-extrabold">Quebrar uma tarefa grande</span>
+          <span className="muted block">Transforma “fazer o TCC” em passos pequenos com tempo.</span></span>
+      </button>
+      {breaking && <Quebrar update={update} onClose={() => setBreaking(false)} />}
+      {!visible.length && <div className="card"><p>Nenhuma tarefa ainda. Comece por um modelo abaixo ou crie a sua.</p></div>}
+      {visible.map((t) => (
         <div key={t.id} className="card flex items-center justify-between gap-3">
           <div>
             <b>{t.name}</b>{t.essential && <span className="pill ml-2">essencial</span>}
             <br />
             <span className="text-sm text-muted">
-              {t.days.length === 7 ? "Todo dia" : t.days.map((d) => DAYS[d]).join(", ")}
+              {t.once ? (t.once === today ? "Só hoje" : `Só em ${t.once.split("-").reverse().slice(0, 2).join("/")}`)
+                : t.days.length === 7 ? "Todo dia" : t.days.map((d) => DAYS[d]).join(", ")}
               {t.time && ` · ${t.time}`} · {t.steps.length} passos
             </span>
           </div>

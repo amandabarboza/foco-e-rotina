@@ -26,7 +26,11 @@ export type Task = {
   days: number[]; // 0 = domingo … 6 = sábado
   time: string; // "" = a qualquer hora do dia
   essential: boolean; // aparece também no modo baixa energia
+  once?: string; // tarefa de um dia só (data); se definida, ignora `days`
 };
+// Pensamento despejado: sem balde = ainda não triado.
+export type Thought = { id: string; text: string; created: string; bucket?: "hoje" | "depois" | "nao"; done?: boolean; doneAt?: string };
+export type Review = { worked: string; stuck: string; adjust: string };
 export type Focus = {
   label: string;
   subjectId?: string;
@@ -52,6 +56,10 @@ export type State = {
   studyLog: Record<string, Record<string, number>>; // dia -> matéria -> minutos
   studyTasks: StudyTask[];
   onboarded: boolean;
+  thoughts: Thought[];
+  reviews: Record<string, Review>; // semana (domingo) -> revisão
+  starts: Record<string, number>; // dia -> vezes que usou "Só 2 minutos"
+  notifiedTransitions: Record<string, true>;
   log: Record<string, DoseStatus>;
   snooze: Record<string, number>;
   lastNotified: Record<string, number>;
@@ -61,7 +69,7 @@ export type Dose = { id: string; med: Med; time: string; at: number; status: Dos
 export const KEY = "foco-e-rotina:v1";
 export const REPEAT_MIN = 10; // repete o lembrete a cada 10 min até confirmar
 
-export const emptyState = (): State => ({ profile: null, weights: [], water: {}, meals: {}, meds: [], tasks: [], taskDone: {}, stepDone: {}, lowEnergy: {}, focus: null, focusLog: {}, subjects: [], studyLog: {}, studyTasks: [], onboarded: false, log: {}, snooze: {}, lastNotified: {} });
+export const emptyState = (): State => ({ profile: null, weights: [], water: {}, meals: {}, meds: [], tasks: [], taskDone: {}, stepDone: {}, lowEnergy: {}, focus: null, focusLog: {}, subjects: [], studyLog: {}, studyTasks: [], onboarded: false, thoughts: [], reviews: {}, starts: {}, notifiedTransitions: {}, log: {}, snooze: {}, lastNotified: {} });
 
 export function loadState(): State {
   try {
@@ -170,7 +178,7 @@ export function todayTasks(s: State): TaskToday[] {
   const today = dayKey();
   const wd = new Date().getDay();
   return s.tasks
-    .filter((t) => t.days.includes(wd))
+    .filter((t) => (t.once ? t.once === today : t.days.includes(wd)))
     .map((task) => {
       let at: number | null = null;
       if (task.time) {
@@ -216,4 +224,68 @@ export function weekStudy(s: State) {
     d.setDate(d.getDate() + 1);
   }
   return out;
+}
+
+// Domingo da semana de `d`, como chave "AAAA-MM-DD".
+export function weekKey(d = new Date()) {
+  const x = new Date(d);
+  x.setDate(x.getDate() - x.getDay());
+  return dayKey(x);
+}
+
+// Tudo o que foi feito num dia, para mostrar conquistas (nunca o que faltou).
+export function doneOn(s: State, day: string): string[] {
+  const out: string[] = [];
+  const meds = Object.entries(s.log).filter(([k, v]) => k.startsWith(day + "|") && v === "taken").length;
+  if (meds) out.push(`💊 ${meds === 1 ? "Tomou o remédio" : `Tomou ${meds} remédios`}`);
+  for (const key of Object.keys(s.taskDone)) {
+    if (!key.startsWith(day + "|")) continue;
+    const t = s.tasks.find((x) => x.id === key.split("|")[1]);
+    out.push(`🏠 ${t ? t.name : "Tarefa feita"}`);
+  }
+  const study = Object.values(s.studyLog[day] ?? {}).reduce((a, b) => a + b, 0);
+  if (study) out.push(`📚 Estudou ${study} min`);
+  const water = s.water[day] ?? 0;
+  if (water >= 1000) out.push(`💧 Bebeu ${(water / 1000).toFixed(1).replace(".", ",")} L de água`);
+  if ((s.meals[day] ?? []).length) out.push("🍽️ Registrou o que comeu");
+  if (s.weights.some((w) => w.date === day)) out.push("⚖️ Registrou o peso");
+  for (const t of s.thoughts) if (t.done && t.doneAt === day) out.push(`✨ ${t.text}`);
+  if (s.starts[day]) out.push(`🚀 Começou ${s.starts[day] === 1 ? "uma coisa difícil" : `${s.starts[day]} coisas difíceis`}`);
+  return out;
+}
+
+// Dias com pelo menos uma conquista nos últimos `n` dias, e a sequência atual.
+export function activity(s: State, n = 30) {
+  let active = 0, streak = 0, counting = true;
+  const d = new Date();
+  for (let i = 0; i < n; i++) {
+    const ok = doneOn(s, dayKey(d)).length > 0;
+    if (ok) active++;
+    // Hoje ainda sem nada não quebra a sequência.
+    if (counting) {
+      if (ok) streak++;
+      else if (i > 0) counting = false;
+    }
+    d.setDate(d.getDate() - 1);
+  }
+  return { active, streak };
+}
+
+export function weekStats(s: State, start = weekKey()) {
+  const [y, m, dd] = start.split("-").map(Number);
+  const d = new Date(y, m - 1, dd);
+  let medsTaken = 0, medsTotal = 0, tasks = 0, study = 0, water = 0, active = 0;
+  for (let i = 0; i < 7; i++) {
+    const day = dayKey(d);
+    if (d.getTime() <= Date.now()) {
+      medsTotal += s.meds.reduce((a, med) => a + med.times.length, 0);
+      medsTaken += Object.entries(s.log).filter(([k, v]) => k.startsWith(day + "|") && v === "taken").length;
+      tasks += Object.keys(s.taskDone).filter((k) => k.startsWith(day + "|")).length;
+      study += Object.values(s.studyLog[day] ?? {}).reduce((a, b) => a + b, 0);
+      water += s.water[day] ?? 0;
+      if (doneOn(s, day).length) active++;
+    }
+    d.setDate(d.getDate() + 1);
+  }
+  return { medsTaken, medsTotal, tasks, study, water, active };
 }
