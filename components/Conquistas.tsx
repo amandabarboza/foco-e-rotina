@@ -24,7 +24,7 @@ export default function Conquistas({ state, onStart }: { state: State; onStart: 
         </>
       )}
       {done.length > 4 && (
-        <button className="mt-2 flex min-h-[40px] items-center gap-1 text-sm font-bold text-accent" onClick={() => setAll(!all)}>
+        <button className="mt-2 flex min-h-[44px] items-center gap-1 text-sm font-bold text-accent" onClick={() => setAll(!all)}>
           {all ? "Ver menos" : `Ver todas (${done.length})`} <ChevronRight size={16} className={all ? "-rotate-90" : "rotate-90"} />
         </button>
       )}

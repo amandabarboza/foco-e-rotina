@@ -61,7 +61,7 @@ export default function FoodPicker({ open, onClose, meal: initialMeal, state, on
           <p className="text-3xl font-bold">{Math.round(picked.kcal * qty)} kcal</p>
           <p className="text-sm">Proteína {r(picked.p)} g · Carbo {r(picked.c)} g · Gordura {r(picked.f)} g</p>
         </div>
-        <button className="btn !bg-food !text-white" onClick={() => {
+        <button className="btn !bg-food !text-[var(--on-color)]" onClick={() => {
           onAdd({ id: uid(), name: picked.name, foodId: picked.id, qty, meal, kcal: Math.round(picked.kcal * qty), p: r(picked.p), c: r(picked.c), f: r(picked.f) });
           close();
         }}>Adicionar</button>
@@ -76,7 +76,7 @@ export default function FoodPicker({ open, onClose, meal: initialMeal, state, on
         <label className="label" htmlFor="fp-kcal">Calorias (veja no rótulo)</label>
         <input id="fp-kcal" className="field" inputMode="numeric" value={mKcal} onChange={(e) => setMKcal(e.target.value.replace(/\D/g, ""))} placeholder="ex.: 550" />
         {mealChips}
-        <button className="btn !bg-food !text-white" disabled={!mName.trim() || !mKcal} onClick={() => {
+        <button className="btn !bg-food !text-[var(--on-color)]" disabled={!mName.trim() || !mKcal} onClick={() => {
           onAdd({ id: uid(), name: mName.trim(), meal, kcal: Number(mKcal) });
           close();
         }}>Adicionar</button>
@@ -94,7 +94,7 @@ export default function FoodPicker({ open, onClose, meal: initialMeal, state, on
           <div className="-mx-5 mt-2 flex gap-2 overflow-x-auto px-5 pb-1">
             {(["todos", ...Object.keys(CATS)] as (FoodCat | "todos")[]).map((c) => (
               <button key={c} onClick={() => setCat(c)} aria-pressed={cat === c}
-                className={`min-h-[40px] shrink-0 rounded-full px-3 text-sm ${cat === c ? "bg-food font-semibold text-white" : "border-2 border-line"}`}>
+                className={`min-h-[44px] shrink-0 rounded-full px-3 text-sm ${cat === c ? "bg-food font-semibold text-[var(--on-color)]" : "border-2 border-line"}`}>
                 {c === "todos" ? "Todos" : CATS[c]}
               </button>
             ))}

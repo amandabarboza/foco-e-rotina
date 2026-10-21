@@ -59,7 +59,7 @@ export default function Inicio({ state, update, mark, snooze, go }: Props) {
 
   return (
     <>
-      <section className="hero rise -mx-4 rounded-b-[36px] px-5 pb-6 pt-4">
+      <section className="hero rise -mx-[16px] -mt-[calc(8px+env(safe-area-inset-top))] rounded-b-[36px] px-5 pb-6 pt-[calc(20px+env(safe-area-inset-top))]">
         <p className="text-sm font-semibold opacity-70">{date}</p>
         <h1 className="h1 mt-1">{greeting()}{name ? `, ${name}` : ""} 🌷</h1>
         <p className="mt-1 opacity-80">{phrase}</p>
@@ -101,7 +101,7 @@ export default function Inicio({ state, update, mark, snooze, go }: Props) {
       <Conquistas state={state} onStart={() => setArranque(true)} />
 
       <details className="card">
-        <summary className="flex min-h-[32px] cursor-pointer items-center justify-between font-bold">
+        <summary className="flex min-h-[44px] cursor-pointer items-center justify-between font-bold">
           Meu dia completo <ChevronRight size={18} />
         </summary>
         <Hoje state={state} update={update} mark={mark} />
@@ -138,7 +138,7 @@ function NowCard({ state, update, mark, snooze, go }: Props) {
         {late && <p className="muted mt-1">Sem pressa, ainda dá tempo.</p>}
         <button className="btn !bg-med" onClick={() => mark(due.id, "taken")}><Check size={22} /> Tomei</button>
         <div className="grid grid-cols-2 gap-2">
-          <button className="btn btn-secondary" onClick={() => snooze(due.id)}>Daqui a {REPEAT_MIN} min</button>
+          <button className="btn btn-secondary" onClick={() => snooze(due.id)}>Adiar {REPEAT_MIN} min</button>
           <button className="btn btn-secondary" onClick={() => mark(due.id, "skipped")}>Pular hoje</button>
         </div>
       </div>
@@ -239,7 +239,7 @@ function Tiles({ state, update, go }: Pick<Props, "state" | "update" | "go">) {
           </Ring>
           <button aria-label="Bebi um copo de água, mais 250 mililitros"
             onClick={() => update((s) => ({ ...s, water: { ...s.water, [today]: (s.water[today] ?? 0) + 250 } }))}
-            className="grid h-12 w-12 place-items-center rounded-full bg-water text-lg font-bold text-white active:scale-95">+</button>
+            className="grid h-12 w-12 place-items-center rounded-full bg-water text-lg font-bold text-[var(--on-color)] active:scale-95">+</button>
         </div>
       </div>
 

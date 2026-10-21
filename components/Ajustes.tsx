@@ -41,7 +41,7 @@ export default function Ajustes({ state, replaceAll, update }: Props) {
       <div className="card">
         <p className="flex items-center gap-2 font-semibold text-med"><Pill size={18} /> Remédios</p>
         <p className="muted">{state.meds.length ? `${state.meds.length} remédio(s), com um segundo aviso 10 min depois.` : "Cadastre remédios em Rotina primeiro."}</p>
-        <button className="btn !bg-med !text-white" disabled={!state.meds.length} onClick={() => download("remedios.ics", "text/calendar", buildICS(state))}>
+        <button className="btn !bg-med !text-[var(--on-color)]" disabled={!state.meds.length} onClick={() => download("remedios.ics", "text/calendar", buildICS(state))}>
           Gerar alarmes de remédios
         </button>
       </div>
@@ -53,7 +53,7 @@ export default function Ajustes({ state, replaceAll, update }: Props) {
         </div>
         <p className="label">A cada</p>
         <Chips options={[1, 2, 3]} value={wEvery} onChange={setWEvery} render={(h) => `${h} h`} />
-        <button className="btn !bg-water !text-white" onClick={() => {
+        <button className="btn !bg-water !text-[var(--on-color)]" onClick={() => {
           if (!wFrom || !wTo || wFrom > wTo) return alert("Confira os horários: o início deve ser antes do fim.");
           download("agua.ics", "text/calendar", buildWaterICS(wFrom, wTo, wEvery));
         }}>Gerar lembretes de água</button>

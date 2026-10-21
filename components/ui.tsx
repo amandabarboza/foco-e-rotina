@@ -25,7 +25,7 @@ export function Stepper({ value, onChange, step = 1, min = 0, max = 999, decimal
           }}
           onKeyDown={(e) => e.key === "Enter" && (e.target as HTMLInputElement).blur()} />
       ) : (
-        <button className="min-w-24 text-center" onClick={() => setTyping(fmt(value))} aria-label={`${label}: ${fmt(value)} ${unit ?? ""}. Toque para digitar`}>
+        <button className="min-h-[44px] min-w-24 text-center" onClick={() => setTyping(fmt(value))} aria-label={`${label}: ${fmt(value)} ${unit ?? ""}. Toque para digitar`}>
           <span className="text-3xl font-bold tabular-nums">{fmt(value)}</span>
           {unit && <span className="ml-1 text-muted">{unit}</span>}
         </button>

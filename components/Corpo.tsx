@@ -117,7 +117,7 @@ function Meals({ state, update, profile, kg }: Props & { profile: Profile | null
                 <span>{m.qty && m.qty !== 1 ? `${fmtNum(m.qty)}× ` : ""}{m.name}</span>
                 <span className="flex items-center gap-2">
                   <span className="tabular-nums text-muted">{m.kcal}</span>
-                  <button onClick={() => remove(m.id)} aria-label={`Remover ${m.name}`} className="grid h-10 w-10 place-items-center rounded-full text-muted"><Trash2 size={18} /></button>
+                  <button onClick={() => remove(m.id)} aria-label={`Remover ${m.name}`} className="grid h-11 w-11 place-items-center rounded-full text-muted"><Trash2 size={18} /></button>
                 </span>
               </div>
             ))}
@@ -152,7 +152,7 @@ function Water({ state, update, kg }: Props & { kg: number | null }) {
         <p className="muted mt-2">{ml >= goal ? "Meta batida! 🎉" : `Faltam ${Math.max(0, cups - drunk)} copos de 250 ml.`}</p>
         <div className="mt-1 grid grid-cols-3 gap-2">
           {[250, 500, 750].map((n) => (
-            <button key={n} className="btn !bg-water !text-white" onClick={() => add(n)}>+{n} ml</button>
+            <button key={n} className="btn !bg-water !text-[var(--on-color)]" onClick={() => add(n)}>+{n} ml</button>
           ))}
         </div>
         {ml > 0 && <button className="btn btn-secondary" onClick={() => add(-250)}><Undo2 size={18} /> Desfazer 250 ml</button>}
@@ -212,7 +212,7 @@ function Weight({ state, update, profile, kg }: Props & { profile: Profile | nul
 
         <p className="label">Registrar peso de hoje</p>
         <Stepper label="Peso de hoje" value={val} onChange={setVal} step={0.1} decimals={1} min={30} max={300} unit="kg" />
-        <button className="btn !bg-weight !text-white" onClick={save}>Salvar peso</button>
+        <button className="btn !bg-weight !text-[var(--on-color)]" onClick={save}>Salvar peso</button>
 
         {list.length > 0 && (
           <>
@@ -223,7 +223,7 @@ function Weight({ state, update, profile, kg }: Props & { profile: Profile | nul
               <div key={w.date} className="flex items-center justify-between border-t border-line py-2">
                 <span>{fmtDate(w.date)}</span>
                 <span className="flex items-center gap-2"><b className="tabular-nums">{fmtNum(w.kg)} kg</b>
-                  <button aria-label={`Remover registro de ${fmtDate(w.date)}`} className="grid h-10 w-10 place-items-center text-muted"
+                  <button aria-label={`Remover registro de ${fmtDate(w.date)}`} className="grid h-11 w-11 place-items-center text-muted"
                     onClick={() => update((s) => ({ ...s, weights: s.weights.filter((x) => x.date !== w.date) }))}><Trash2 size={18} /></button>
                 </span>
               </div>

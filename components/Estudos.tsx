@@ -107,7 +107,7 @@ function Home({ state, update }: Props) {
         </div>
         <p className="label">Por quanto tempo</p>
         <Chips options={FOCUS_MIN} value={focusMin} onChange={setFocusMin} render={(x) => `${x} min`} />
-        <button className="btn !bg-study !text-white" onClick={start}><Play size={20} /> Começar {focusMin} min</button>
+        <button className="btn !bg-study !text-[var(--on-color)]" onClick={start}><Play size={20} /> Começar {focusMin} min</button>
         <p className="muted mt-2">Travou para começar? Escolha 15 min e só abra o material. Às vezes isso basta.</p>
       </div>
 
@@ -119,7 +119,7 @@ function Home({ state, update }: Props) {
         return (
           <div key={t.id} className="card flex items-center gap-3 !py-3">
             <button aria-label={`Marcar ${t.title} como feito`} onClick={() => update((s) => ({ ...s, studyTasks: s.studyTasks.map((x) => (x.id === t.id ? { ...x, done: true } : x)) }))}
-              className="grid h-10 w-10 shrink-0 place-items-center rounded-full border-2 border-line"><Check size={18} className="opacity-30" /></button>
+              className="grid h-11 w-11 shrink-0 place-items-center rounded-full border-2 border-line"><Check size={18} className="opacity-30" /></button>
             <button className="flex-1 text-left" onClick={() => setEditTask(t)}>
               <span className="block font-semibold">{t.title}</span>
               <span className="muted block">{KINDS[t.kind]}{subj ? ` · ${subj.name}` : ""}</span>
@@ -148,7 +148,7 @@ function Home({ state, update }: Props) {
         <div key={s.id} className="card !py-3">
           <div className="flex items-center justify-between gap-2">
             <p className="flex items-center gap-2 font-semibold"><span className="h-3 w-3 rounded-full" style={{ background: s.color }} />{s.name}</p>
-            <button aria-label={`Editar ${s.name}`} onClick={() => setEditSubject(s)} className="grid h-10 w-10 place-items-center rounded-full text-muted"><Pencil size={18} /></button>
+            <button aria-label={`Editar ${s.name}`} onClick={() => setEditSubject(s)} className="grid h-11 w-11 place-items-center rounded-full text-muted"><Pencil size={18} /></button>
           </div>
           <div className="mt-1"><Bar label="Esta semana" value={week[s.id] ?? 0} max={s.weeklyGoalMin} color={s.color} unit="min" /></div>
         </div>
@@ -180,7 +180,7 @@ function SubjectSheet({ subject, state, update, onClose }: Props & { subject: Su
       <p className="label">Meta por semana</p>
       <Stepper label="Meta semanal" value={s.weeklyGoalMin} onChange={(weeklyGoalMin) => setS({ ...s, weeklyGoalMin })} step={30} min={30} max={2400} unit="min" />
       <p className="muted mt-1">{fmtMin(s.weeklyGoalMin)} por semana ≈ {Math.round(s.weeklyGoalMin / 5)} min por dia útil.</p>
-      <button className="btn !bg-study !text-white" disabled={!s.name.trim()} onClick={() => {
+      <button className="btn !bg-study !text-[var(--on-color)]" disabled={!s.name.trim()} onClick={() => {
         update((st) => ({ ...st, subjects: isNew ? [...st.subjects, { ...s, name: s.name.trim() }] : st.subjects.map((x) => (x.id === s.id ? { ...s, name: s.name.trim() } : x)) }));
         onClose();
       }}>Salvar</button>
@@ -213,7 +213,7 @@ function TaskSheet({ task, state, update, onClose }: Props & { task: StudyTask; 
       )}
       <label className="label" htmlFor="st-due">Data</label>
       <input id="st-due" type="date" className="field" value={t.due} onChange={(e) => setT({ ...t, due: e.target.value })} />
-      <button className="btn !bg-study !text-white" disabled={!t.title.trim() || !t.due} onClick={() => {
+      <button className="btn !bg-study !text-[var(--on-color)]" disabled={!t.title.trim() || !t.due} onClick={() => {
         update((s) => ({ ...s, studyTasks: isNew ? [...s.studyTasks, { ...t, title: t.title.trim() }] : s.studyTasks.map((x) => (x.id === t.id ? { ...t, title: t.title.trim() } : x)) }));
         onClose();
       }}>Salvar</button>
@@ -265,13 +265,13 @@ function Timer({ state, update }: Props) {
               <p className="text-lg">Você estudou <b>{f.minutes} min</b> de {f.label}.</p>
               <p className="label">Pausa de</p>
               <Chips options={BREAK_MIN} value={breakMin} onChange={setBreakMin} render={(x) => `${x} min`} />
-              <button className="btn !bg-study !text-white" onClick={() => (unlockAudio(), close({ ...f, phase: "break", minutes: breakMin, endsAt: Date.now() + breakMin * 60000 }))}>Começar pausa</button>
+              <button className="btn !bg-study !text-[var(--on-color)]" onClick={() => (unlockAudio(), close({ ...f, phase: "break", minutes: breakMin, endsAt: Date.now() + breakMin * 60000 }))}>Começar pausa</button>
               <button className="btn btn-secondary" onClick={() => close(null)}>Parar por agora</button>
             </>
           ) : (
             <>
               <p className="text-lg">Pronta para mais um bloco?</p>
-              <button className="btn !bg-study !text-white" onClick={() => (unlockAudio(), close({ ...f, phase: "focus", minutes: 25, endsAt: Date.now() + 25 * 60000 }))}>Mais 25 min de {f.label}</button>
+              <button className="btn !bg-study !text-[var(--on-color)]" onClick={() => (unlockAudio(), close({ ...f, phase: "focus", minutes: 25, endsAt: Date.now() + 25 * 60000 }))}>Mais 25 min de {f.label}</button>
               <button className="btn btn-secondary" onClick={() => close(null)}>Parar por hoje</button>
             </>
           )}
@@ -303,9 +303,9 @@ function Timer({ state, update }: Props) {
         {f.phase === "break" && <p className="mt-4 text-center">Levanta, bebe água, olha pela janela.</p>}
       </div>
       {f.endsAt ? (
-        <button className="btn !bg-study !text-white" onClick={() => update((s) => ({ ...s, focus: { ...f, endsAt: null, leftMs: left } }))}><Pause size={20} /> Pausar</button>
+        <button className="btn !bg-study !text-[var(--on-color)]" onClick={() => update((s) => ({ ...s, focus: { ...f, endsAt: null, leftMs: left } }))}><Pause size={20} /> Pausar</button>
       ) : (
-        <button className="btn !bg-study !text-white" onClick={() => update((s) => ({ ...s, focus: { ...f, endsAt: Date.now() + f.leftMs } }))}><Play size={20} /> Continuar</button>
+        <button className="btn !bg-study !text-[var(--on-color)]" onClick={() => update((s) => ({ ...s, focus: { ...f, endsAt: Date.now() + f.leftMs } }))}><Play size={20} /> Continuar</button>
       )}
       <button className="btn btn-secondary" onClick={stop}><Square size={18} /> Encerrar</button>
       <p className="muted mt-3">No iPhone, o som do fim só toca com o app aberto. Se sair, ao voltar o tempo estará certo.</p>
