@@ -2,24 +2,25 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { DoseStatus, Med, REPEAT_MIN, State, loadState, nextPending, saveState } from "@/lib/store";
-import Agora from "./Agora";
+import { BookOpen, HeartPulse, House, ListChecks, Settings } from "lucide-react";
+import Inicio, { Tab } from "./Agora";
 import Rotina from "./Rotina";
-import Foco from "./Foco";
+import Estudos from "./Estudos";
 import Ajustes from "./Ajustes";
 import Corpo from "./Corpo";
+import Onboarding from "./Onboarding";
 
-const TABS = [
-  { id: "agora", label: "Agora" },
-  { id: "rotina", label: "Rotina" },
-  { id: "foco", label: "Foco" },
-  { id: "corpo", label: "Corpo" },
-  { id: "ajustes", label: "Ajustes" },
-] as const;
-type Tab = (typeof TABS)[number]["id"];
+const TABS: { id: Tab; label: string; Icon: typeof House }[] = [
+  { id: "inicio", label: "Início", Icon: House },
+  { id: "rotina", label: "Rotina", Icon: ListChecks },
+  { id: "estudos", label: "Estudos", Icon: BookOpen },
+  { id: "corpo", label: "Corpo", Icon: HeartPulse },
+  { id: "ajustes", label: "Ajustes", Icon: Settings },
+];
 
 export default function App() {
   const [state, setState] = useState<State | null>(null);
-  const [tab, setTab] = useState<Tab>("agora");
+  const [tab, setTab] = useState<Tab>("inicio");
   const [, setNow] = useState(0);
 
   useEffect(() => {
@@ -64,6 +65,12 @@ export default function App() {
   }, [state, update]);
 
   if (!state) return null;
+  if (!state.onboarded) return <Onboarding state={state} update={update} />;
+
+  const go = (t: Tab) => {
+    setTab(t);
+    window.scrollTo(0, 0);
+  };
 
   const mark = (id: string, status: DoseStatus | null) =>
     update((s) => {
@@ -86,27 +93,25 @@ export default function App() {
 
   return (
     <>
-      <main className="mx-auto max-w-[560px] pt-5" aria-live="polite">
-        {tab === "agora" && <Agora state={state} update={update} mark={mark} snooze={snooze} goAdd={() => setTab("rotina")} />}
+      <main className="mx-auto max-w-[560px] pt-3">
+        {tab === "inicio" && <Inicio state={state} update={update} mark={mark} snooze={snooze} go={go} />}
         {tab === "rotina" && <Rotina state={state} update={update} saveMed={saveMed} deleteMed={deleteMed} />}
-        {tab === "foco" && <Foco state={state} update={update} />}
+        {tab === "estudos" && <Estudos state={state} update={update} />}
         {tab === "corpo" && <Corpo state={state} update={update} />}
-        {tab === "ajustes" && <Ajustes state={state} replaceAll={replaceAll} />}
+        {tab === "ajustes" && <Ajustes state={state} replaceAll={replaceAll} update={update} />}
       </main>
-      <nav
-        className="fixed inset-x-0 bottom-0 grid grid-cols-5 border-t border-line bg-card pb-[env(safe-area-inset-bottom)]"
-        aria-label="Navegação"
-      >
-        {TABS.map((t) => (
-          <button
-            key={t.id}
-            onClick={() => setTab(t.id)}
-            aria-current={tab === t.id ? "page" : undefined}
-            className={`min-h-[60px] text-sm ${tab === t.id ? "font-bold text-accent" : "text-muted"}`}
-          >
-            {t.label}
-          </button>
-        ))}
+      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-card/95 pb-[env(safe-area-inset-bottom)] backdrop-blur" aria-label="Navegação">
+        <div className="mx-auto grid max-w-[560px] grid-cols-5">
+          {TABS.map(({ id, label, Icon }) => (
+            <button key={id} onClick={() => go(id)} aria-current={tab === id ? "page" : undefined}
+              className={`flex min-h-[64px] flex-col items-center justify-center gap-1 text-[.75rem] ${tab === id ? "font-bold text-accent" : "text-muted"}`}>
+              <span className={`grid h-8 w-14 place-items-center rounded-full transition ${tab === id ? "bg-soft" : ""}`}>
+                <Icon size={22} strokeWidth={tab === id ? 2.4 : 2} />
+              </span>
+              {label}
+            </button>
+          ))}
+        </div>
       </nav>
     </>
   );

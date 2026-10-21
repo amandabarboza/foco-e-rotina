@@ -6,14 +6,13 @@ export const metadata: Metadata = {
   description: "Lembretes de remédio e rotina, simples e sem culpa.",
   manifest: "/manifest.webmanifest",
   appleWebApp: { capable: true, title: "Foco e Rotina", statusBarStyle: "default" },
-  icons: { icon: "/icons/icon-192.png", apple: "/icons/icon-180.png" },
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#f4f1ea",
+  themeColor: "#f5f3ee",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

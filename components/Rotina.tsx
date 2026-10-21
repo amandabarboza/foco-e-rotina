@@ -26,7 +26,7 @@ export default function Rotina(props: Props) {
   const [sub, setSub] = useState<"tarefas" | "remedios">("tarefas");
   return (
     <>
-      <h1 className="mb-2 text-2xl font-bold">Rotina</h1>
+      <h1 className="h1 mb-3 pt-2">Rotina</h1>
       <div className="grid grid-cols-2 gap-1 rounded-[14px] bg-soft p-1" role="tablist">
         {(["tarefas", "remedios"] as const).map((id) => (
           <button key={id} role="tab" aria-selected={sub === id} onClick={() => setSub(id)}

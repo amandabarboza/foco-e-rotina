@@ -3,48 +3,71 @@
 @tailwind utilities;
 
 :root {
-  --bg: #f4f1ea;
+  --bg: #f5f3ee;
   --card: #ffffff;
-  --ink: #2b2f36;
+  --ink: #23272e;
   --muted: #6b7280;
-  --accent: #3f7d6e;
+  --accent: #2f7d6d;
   --accent-ink: #ffffff;
-  --soft: #e3efe9;
-  --warm: #f6e7c8;
-  --line: #e2ddd2;
+  --soft: #e4f0eb;
+  --warm: #f8ead0;
+  --line: #e4dfd5;
+  --med: #7a62c9;
+  --med-soft: #eeeafb;
+  --water: #2f80c2;
+  --water-soft: #e3f0fa;
+  --food: #d27a1e;
+  --food-soft: #fbeedd;
+  --study: #3d8a4f;
+  --study-soft: #e5f3e7;
+  --weight: #c2507a;
+  --weight-soft: #f9e6ee;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #17191c;
-    --card: #22262b;
+    --bg: #15171a;
+    --card: #20242a;
     --ink: #eceae4;
     --muted: #9aa0a8;
-    --accent: #6fb5a3;
-    --accent-ink: #10201b;
-    --soft: #23332e;
-    --warm: #3a3224;
-    --line: #333840;
+    --accent: #6cc0a8;
+    --accent-ink: #0e1f1a;
+    --soft: #1f312b;
+    --warm: #3a3123;
+    --line: #323840;
+    --med: #a995ee;
+    --med-soft: #2b2640;
+    --water: #6db4ec;
+    --water-soft: #1d2d3b;
+    --food: #f0a457;
+    --food-soft: #3a2c1d;
+    --study: #79c98a;
+    --study-soft: #1f3324;
+    --weight: #ec8cb0;
+    --weight-soft: #3a2230;
   }
 }
 
 html, body { background: var(--bg); color: var(--ink); }
 body {
-  font: 18px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  padding: env(safe-area-inset-top) 16px calc(88px + env(safe-area-inset-bottom));
+  font: 17px/1.45 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+  padding: env(safe-area-inset-top) 16px calc(96px + env(safe-area-inset-bottom));
   -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
 }
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
-@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 
 @layer components {
-  .card { @apply my-3.5 rounded-card border border-line bg-card p-[18px]; }
+  .card { @apply my-3 rounded-[20px] border border-line bg-card p-[18px] shadow-[0_1px_2px_rgba(0,0,0,.04)]; }
   .btn {
-    @apply mt-3 block min-h-[56px] w-full rounded-[14px] border-0 bg-accent font-semibold text-accent-ink active:scale-[.98];
+    @apply mt-3 flex min-h-[54px] w-full items-center justify-center gap-2 rounded-2xl border-0 bg-accent px-4 font-semibold text-accent-ink transition active:scale-[.98] disabled:opacity-40;
   }
   .btn-secondary { @apply border-2 border-line bg-transparent text-ink; }
-  .btn-small { @apply mr-1.5 mt-1.5 inline-block min-h-[44px] w-auto px-4; }
+  .btn-small { @apply mr-1.5 mt-1.5 inline-flex min-h-[44px] w-auto px-4 text-[.95rem]; }
   .pill { @apply rounded-full bg-soft px-3 py-0.5 text-sm; }
-  .field {
-    @apply min-h-[48px] w-full rounded-xl border-2 border-line bg-bg px-3 text-ink;
-  }
+  .field { @apply min-h-[50px] w-full rounded-xl border-2 border-line bg-bg px-3 text-ink; }
+  .label { @apply mt-4 block text-[.95rem] font-semibold; }
+  .h1 { @apply text-[1.7rem] font-bold leading-tight; }
+  .h2 { @apply mb-1 mt-7 flex items-center gap-2 text-lg font-bold; }
+  .muted { @apply text-sm text-muted; }
 }

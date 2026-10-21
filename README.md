@@ -3,7 +3,8 @@
 PWA para iPhone: lembretes de remédio e rotina, simples e sem culpa. Feito para autismo/TDAH.
 
 - Next.js (App Router) + TypeScript + Tailwind.
-- Abas: Agora (uma coisa por vez + modo baixa energia), Rotina (tarefas com passos e remédios), Foco (timer), Corpo (água, comida, peso, plano), Ajustes.
+- Primeira abertura com passo a passo; tela inicial com o resumo do dia.
+- Abas: Início, Rotina (tarefas com passos e remédios), Estudos (matérias, timer, provas), Corpo (calorias, macros, refeições com lista de alimentos, água, peso com meta), Ajustes.
 - Dados só no aparelho (localStorage). Sem banco, sem login.
 - Rodar: `npm install && npm run dev`
 - Deploy: importar o repositório na Vercel (detecta Next.js sozinha).

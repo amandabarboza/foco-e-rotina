@@ -1,11 +1,24 @@
+import type { MealId } from "./body";
+
 export type Med = { id: string; name: string; dose: string; times: string[] };
 export type DoseStatus = "taken" | "skipped";
 export type Sex = "F" | "M" | "O";
 export type Activity = "sedentary" | "light" | "moderate" | "high";
 export type Goal = "maintain" | "lose_slow" | "lose" | "gain";
-export type Profile = { sex: Sex; age: number; heightCm: number; activity: Activity; goal: Goal };
+export type Profile = {
+  name?: string;
+  sex: Sex;
+  age: number;
+  heightCm: number;
+  activity: Activity;
+  goal: Goal;
+  targetKg?: number;
+};
 export type WeightEntry = { date: string; kg: number };
-export type Meal = { id: string; name: string; kcal: number };
+// p/c/f = proteína, carboidrato e gordura em gramas. Registros antigos podem não ter esses campos.
+export type Meal = { id: string; name: string; kcal: number; p?: number; c?: number; f?: number; meal?: MealId; foodId?: string; qty?: number };
+export type Subject = { id: string; name: string; color: string; weeklyGoalMin: number };
+export type StudyTask = { id: string; title: string; subjectId: string; kind: "prova" | "trabalho" | "leitura" | "outro"; due: string; done: boolean };
 export type Task = {
   id: string;
   name: string;
@@ -16,6 +29,7 @@ export type Task = {
 };
 export type Focus = {
   label: string;
+  subjectId?: string;
   phase: "focus" | "break";
   minutes: number;
   endsAt: number | null; // null = pausado
@@ -34,6 +48,10 @@ export type State = {
   lowEnergy: Record<string, true>; // dia -> modo baixa energia ligado
   focus: Focus | null;
   focusLog: Record<string, number>; // dia -> minutos de foco
+  subjects: Subject[];
+  studyLog: Record<string, Record<string, number>>; // dia -> matéria -> minutos
+  studyTasks: StudyTask[];
+  onboarded: boolean;
   log: Record<string, DoseStatus>;
   snooze: Record<string, number>;
   lastNotified: Record<string, number>;
@@ -43,7 +61,7 @@ export type Dose = { id: string; med: Med; time: string; at: number; status: Dos
 export const KEY = "foco-e-rotina:v1";
 export const REPEAT_MIN = 10; // repete o lembrete a cada 10 min até confirmar
 
-export const emptyState = (): State => ({ profile: null, weights: [], water: {}, meals: {}, meds: [], tasks: [], taskDone: {}, stepDone: {}, lowEnergy: {}, focus: null, focusLog: {}, log: {}, snooze: {}, lastNotified: {} });
+export const emptyState = (): State => ({ profile: null, weights: [], water: {}, meals: {}, meds: [], tasks: [], taskDone: {}, stepDone: {}, lowEnergy: {}, focus: null, focusLog: {}, subjects: [], studyLog: {}, studyTasks: [], onboarded: false, log: {}, snooze: {}, lastNotified: {} });
 
 export function loadState(): State {
   try {
@@ -175,4 +193,27 @@ export function nextTask(s: State, now = Date.now()): TaskToday | null {
       (t) => !t.done && (t.at === null || t.at <= now) && !(s.snooze[t.key] > now) && (!low || t.task.essential),
     ) ?? null
   );
+}
+
+export const latestKg = (s: State) => (s.weights.length ? s.weights[s.weights.length - 1].kg : null);
+
+export function dayTotals(s: State, day = dayKey()) {
+  const meals = s.meals[day] ?? [];
+  return meals.reduce(
+    (a, m) => ({ kcal: a.kcal + m.kcal, p: a.p + (m.p ?? 0), c: a.c + (m.c ?? 0), f: a.f + (m.f ?? 0) }),
+    { kcal: 0, p: 0, c: 0, f: 0 },
+  );
+}
+
+// Minutos de estudo na semana atual (domingo a sábado), por matéria.
+export function weekStudy(s: State) {
+  const out: Record<string, number> = {};
+  const d = new Date();
+  d.setDate(d.getDate() - d.getDay());
+  for (let i = 0; i < 7; i++) {
+    const log = s.studyLog[dayKey(d)] ?? {};
+    for (const [k, v] of Object.entries(log)) out[k] = (out[k] ?? 0) + v;
+    d.setDate(d.getDate() + 1);
+  }
+  return out;
 }
