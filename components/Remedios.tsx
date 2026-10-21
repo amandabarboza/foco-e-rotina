@@ -18,7 +18,7 @@ export default function Remedios({ state, saveMed, deleteMed }: Props) {
     };
     return (
       <>
-        <h1 className="mb-1 text-2xl font-bold">{isNew ? "Novo remédio" : "Editar remédio"}</h1>
+        <h2 className="mt-5 text-lg font-bold">{isNew ? "Novo remédio" : "Editar remédio"}</h2>
         <div className="card">
           <label className="mt-3 block text-[.95rem] font-semibold" htmlFor="f-name">Nome</label>
           <input id="f-name" className="field" autoComplete="off" value={editing.name}
@@ -50,7 +50,6 @@ export default function Remedios({ state, saveMed, deleteMed }: Props) {
 
   return (
     <>
-      <h1 className="mb-1 text-2xl font-bold">Remédios</h1>
       {!state.meds.length && <div className="card"><p>Nenhum remédio ainda.</p></div>}
       {state.meds.map((m) => (
         <div key={m.id} className="card flex items-center justify-between gap-3">

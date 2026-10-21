@@ -3,15 +3,15 @@
 import { useCallback, useEffect, useState } from "react";
 import { DoseStatus, Med, REPEAT_MIN, State, loadState, nextPending, saveState } from "@/lib/store";
 import Agora from "./Agora";
-import Hoje from "./Hoje";
-import Remedios from "./Remedios";
+import Rotina from "./Rotina";
+import Foco from "./Foco";
 import Ajustes from "./Ajustes";
 import Corpo from "./Corpo";
 
 const TABS = [
   { id: "agora", label: "Agora" },
-  { id: "hoje", label: "Hoje" },
-  { id: "remedios", label: "Remédios" },
+  { id: "rotina", label: "Rotina" },
+  { id: "foco", label: "Foco" },
   { id: "corpo", label: "Corpo" },
   { id: "ajustes", label: "Ajustes" },
 ] as const;
@@ -87,9 +87,9 @@ export default function App() {
   return (
     <>
       <main className="mx-auto max-w-[560px] pt-5" aria-live="polite">
-        {tab === "agora" && <Agora state={state} mark={mark} snooze={snooze} goAdd={() => setTab("remedios")} />}
-        {tab === "hoje" && <Hoje state={state} mark={mark} />}
-        {tab === "remedios" && <Remedios state={state} saveMed={saveMed} deleteMed={deleteMed} />}
+        {tab === "agora" && <Agora state={state} update={update} mark={mark} snooze={snooze} goAdd={() => setTab("rotina")} />}
+        {tab === "rotina" && <Rotina state={state} update={update} saveMed={saveMed} deleteMed={deleteMed} />}
+        {tab === "foco" && <Foco state={state} update={update} />}
         {tab === "corpo" && <Corpo state={state} update={update} />}
         {tab === "ajustes" && <Ajustes state={state} replaceAll={replaceAll} />}
       </main>
