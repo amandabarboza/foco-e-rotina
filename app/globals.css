@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #f4f1ea;
+  --card: #ffffff;
+  --ink: #2b2f36;
+  --muted: #6b7280;
+  --accent: #3f7d6e;
+  --accent-ink: #ffffff;
+  --soft: #e3efe9;
+  --warm: #f6e7c8;
+  --line: #e2ddd2;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #17191c;
+    --card: #22262b;
+    --ink: #eceae4;
+    --muted: #9aa0a8;
+    --accent: #6fb5a3;
+    --accent-ink: #10201b;
+    --soft: #23332e;
+    --warm: #3a3224;
+    --line: #333840;
+  }
+}
+
+html, body { background: var(--bg); color: var(--ink); }
+body {
+  font: 18px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  padding: env(safe-area-inset-top) 16px calc(88px + env(safe-area-inset-bottom));
+  -webkit-text-size-adjust: 100%;
+}
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+@layer components {
+  .card { @apply my-3.5 rounded-card border border-line bg-card p-[18px]; }
+  .btn {
+    @apply mt-3 block min-h-[56px] w-full rounded-[14px] border-0 bg-accent font-semibold text-accent-ink active:scale-[.98];
+  }
+  .btn-secondary { @apply border-2 border-line bg-transparent text-ink; }
+  .btn-small { @apply mr-1.5 mt-1.5 inline-block min-h-[44px] w-auto px-4; }
+  .pill { @apply rounded-full bg-soft px-3 py-0.5 text-sm; }
+  .field {
+    @apply min-h-[48px] w-full rounded-xl border-2 border-line bg-bg px-3 text-ink;
+  }
+}
