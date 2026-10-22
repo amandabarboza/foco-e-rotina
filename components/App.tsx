@@ -102,17 +102,20 @@ export default function App() {
         {tab === "corpo" && <Corpo state={state} update={update} />}
         {tab === "ajustes" && <Ajustes state={state} replaceAll={replaceAll} update={update} />}
       </main>
-      <nav className="fixed inset-x-3 bottom-[calc(10px+env(safe-area-inset-bottom))] z-40 mx-auto max-w-[540px] rounded-[30px] border border-line bg-card/90 px-1 shadow-[0_12px_40px_-12px_rgba(120,60,90,.35)] backdrop-blur-xl" aria-label="Navegação">
-        <div className="grid grid-cols-5">
-          {TABS.map(({ id, label, Icon }) => (
-            <button key={id} onClick={() => go(id)} aria-current={tab === id ? "page" : undefined}
-              className={`flex min-h-[62px] flex-col items-center justify-center gap-0.5 text-[.72rem] ${tab === id ? "font-extrabold text-accent" : "text-muted"}`}>
-              <span className={`grid h-8 w-12 place-items-center rounded-full transition ${tab === id ? "bg-soft" : ""}`}>
-                <Icon size={21} strokeWidth={tab === id ? 2.4 : 1.9} />
-              </span>
-              {label}
-            </button>
-          ))}
+      <nav className="fixed inset-x-0 bottom-0 z-40 rounded-t-[28px] border-t-4 border-[#3b2414] bg-[var(--nav)] pb-[calc(6px+env(safe-area-inset-bottom))] pt-1 shadow-[0_-6px_20px_-10px_rgba(40,20,5,.6)]" aria-label="Navegação">
+        <div className="mx-auto grid max-w-[560px] grid-cols-5">
+          {TABS.map(({ id, label, Icon }) => {
+            const on = tab === id;
+            return (
+              <button key={id} onClick={() => go(id)} aria-current={on ? "page" : undefined}
+                className="flex min-h-[66px] flex-col items-center justify-end gap-1 text-[.72rem] font-extrabold text-[#fff3cf]">
+                <span className={`grid place-items-center rounded-full border-[3px] border-[#3b2414] text-[#4a2c12] transition ${on ? "h-[52px] w-[52px] -translate-y-3 bg-[#ffe27a] shadow-[0_4px_0_#3b2414]" : "h-11 w-11 bg-[var(--coin)] shadow-[0_3px_0_#3b2414]"}`}>
+                  <Icon size={on ? 24 : 21} strokeWidth={2.4} />
+                </span>
+                <span className={on ? "-mt-2" : "opacity-80"}>{label}</span>
+              </button>
+            );
+          })}
         </div>
       </nav>
     </>

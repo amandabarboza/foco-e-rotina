@@ -101,22 +101,22 @@ export default function Onboarding({ state, update }: Props) {
     <div className="mx-auto flex min-h-[100dvh] max-w-[560px] flex-col pb-6 pt-4">
       <div className="flex items-center gap-3">
         {step > 0 ? (
-          <button onClick={() => setStep(step - 1)} aria-label="Voltar" className="grid h-11 w-11 place-items-center rounded-full bg-card">
+          <button onClick={() => setStep(step - 1)} aria-label="Voltar" className="grid h-11 w-11 place-items-center rounded-full border-2 border-[var(--card-edge)] bg-card">
             <ChevronLeft size={22} />
           </button>
         ) : <span className="w-11" />}
         <div className="flex flex-1 gap-1.5" aria-label={`Passo ${step + 1} de ${STEPS.length}`}>
-          {STEPS.map((_, i) => <span key={i} className={`h-1.5 flex-1 rounded-full ${i <= step ? "bg-accent" : "bg-line"}`} />)}
+          {STEPS.map((_, i) => <span key={i} className={`h-2.5 flex-1 rounded-full border-2 border-[#3b2414] ${i <= step ? "bg-[var(--btn)]" : "bg-white/40"}`} />)}
         </div>
         {step < STEPS.length - 1 ? (
-          <button onClick={() => update((s) => ({ ...s, onboarded: true }))} className="min-h-[44px] px-2 text-sm text-muted">Pular</button>
+          <button onClick={() => update((s) => ({ ...s, onboarded: true }))} className="min-h-[44px] px-2 text-sm font-bold text-white">Pular</button>
         ) : <span className="w-11" />}
       </div>
 
-      <div className="flex-1 pt-6">
+      <div className="card rise flex-1 !mt-6">
         {step === 0 && (
           <>
-            <p className="text-5xl">🌿</p>
+            <p className="text-5xl">🏜️</p>
             <h1 className="h1 mt-3">Oi! Que bom te ver aqui.</h1>
             <p className="mt-3 text-lg">Este app te ajuda com <b>remédios</b>, <b>tarefas da casa</b>, <b>estudos</b> e <b>alimentação</b>, mostrando uma coisa de cada vez.</p>
             <p className="mt-2 text-muted">Leva uns 2 minutos para configurar. Dá para mudar tudo depois.</p>

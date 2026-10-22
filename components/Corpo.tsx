@@ -27,7 +27,7 @@ export default function Corpo({ state, update }: Props) {
       {p && kg ? (
         <PlanCard state={state} profile={p} kg={kg} onGuide={() => setGuide(true)} />
       ) : (
-        <div className="card bg-soft border-0">
+        <div className="card bg-soft">
           <p className="text-lg font-bold">Vamos calcular quanto você pode comer</p>
           <p className="mt-1">Preciso de idade, altura, peso, atividade e objetivo. Leva 1 minuto.</p>
           <button className="btn" onClick={() => setEditing(true)}>Preencher meus dados</button>
@@ -152,7 +152,7 @@ function Water({ state, update, kg }: Props & { kg: number | null }) {
         <p className="muted mt-2">{ml >= goal ? "Meta batida! 🎉" : `Faltam ${Math.max(0, cups - drunk)} copos de 250 ml.`}</p>
         <div className="mt-1 grid grid-cols-3 gap-2">
           {[250, 500, 750].map((n) => (
-            <button key={n} className="btn !bg-water !text-[var(--on-color)]" onClick={() => add(n)}>+{n} ml</button>
+            <button key={n} className="btn" onClick={() => add(n)}>+{n} ml</button>
           ))}
         </div>
         {ml > 0 && <button className="btn btn-secondary" onClick={() => add(-250)}><Undo2 size={18} /> Desfazer 250 ml</button>}
@@ -212,7 +212,7 @@ function Weight({ state, update, profile, kg }: Props & { profile: Profile | nul
 
         <p className="label">Registrar peso de hoje</p>
         <Stepper label="Peso de hoje" value={val} onChange={setVal} step={0.1} decimals={1} min={30} max={300} unit="kg" />
-        <button className="btn !bg-weight !text-[var(--on-color)]" onClick={save}>Salvar peso</button>
+        <button className="btn" onClick={save}>Salvar peso</button>
 
         {list.length > 0 && (
           <>
@@ -280,7 +280,7 @@ function ProfileEditor({ state, update, onClose }: Props & { onClose: () => void
       <ActivityFields p={p} set={set} />
       <h3 className="h2">Objetivo</h3>
       <GoalFields p={p} set={set} kg={kg} />
-      <div className="card bg-soft border-0 text-center">
+      <div className="card bg-soft text-center">
         <p className="muted">Com esses dados, seu limite fica em</p>
         <p className="text-3xl font-bold">{plan(p, kg).target} kcal/dia</p>
       </div>

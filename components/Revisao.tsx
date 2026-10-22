@@ -32,7 +32,7 @@ export function RevisaoCard({ state, update }: Props) {
   const isReviewDay = new Date().getDay() <= 1;
   if (!isReviewDay || state.reviews[wk]) return open ? <RevisaoSheet state={state} update={update} onClose={() => setOpen(false)} /> : null;
   return (
-    <div className="card hero border-0">
+    <div className="card hero">
       <p className="flex items-center gap-2 text-lg font-extrabold"><CalendarHeart size={20} className="text-accent" /> Revisão da semana</p>
       <p className="mt-1">5 minutinhos para ver o que funcionou e ajustar a próxima semana.</p>
       <button className="btn" onClick={() => setOpen(true)}>Fazer revisão</button>

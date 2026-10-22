@@ -61,7 +61,7 @@ export default function Arranque({ state, update, onClose }: Props) {
         <div className="rise">
           <p className="mt-3 text-muted">Começar é a parte mais difícil. Você não precisa terminar nada, só fazer <b>isto</b> por 2 minutos.</p>
           {idea ? (
-            <div className="card hero border-0 text-center">
+            <div className="card hero text-center">
               <p className="text-sm font-bold uppercase tracking-wide text-muted">Para: {idea.from}</p>
               <p className="mt-2 text-2xl font-extrabold leading-snug">{idea.step}</p>
             </div>

@@ -29,10 +29,10 @@ export default function Rotina(props: Props) {
   return (
     <>
       <h1 className="h1 mb-3 pt-2">Rotina</h1>
-      <div className="grid grid-cols-2 gap-1 rounded-[14px] bg-soft p-1" role="tablist">
+      <div className="grid grid-cols-2 gap-2" role="tablist">
         {(["tarefas", "remedios"] as const).map((id) => (
           <button key={id} role="tab" aria-selected={sub === id} onClick={() => setSub(id)}
-            className={`min-h-[44px] rounded-[10px] text-sm ${sub === id ? "bg-card font-bold text-accent" : "text-muted"}`}>
+            className={`min-h-[44px] rounded-full border-2 text-[.95rem] font-extrabold ${sub === id ? "border-[var(--btn-edge)] bg-[var(--btn)] text-[var(--btn-ink)] shadow-[0_3px_0_var(--btn-edge)]" : "border-[var(--card-edge)] bg-card"}`}>
             {id === "tarefas" ? "Tarefas da casa" : "Remédios"}
           </button>
         ))}
@@ -128,7 +128,7 @@ function Tarefas({ state, update }: Pick<Props, "state" | "update">) {
   const visible = state.tasks.filter((t) => !t.once || t.once >= today);
   return (
     <>
-      <button onClick={() => setBreaking(true)} className="card hero mt-4 flex w-full items-center gap-3 border-0 text-left">
+      <button onClick={() => setBreaking(true)} className="card hero mt-4 flex w-full items-center gap-3 text-left">
         <Scissors size={22} className="shrink-0 text-accent" />
         <span><span className="block font-extrabold">Quebrar uma tarefa grande</span>
           <span className="muted block">Transforma “fazer o TCC” em passos pequenos com tempo.</span></span>

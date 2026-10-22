@@ -60,6 +60,7 @@ export type State = {
   reviews: Record<string, Review>; // semana (domingo) -> revisão
   starts: Record<string, number>; // dia -> vezes que usou "Só 2 minutos"
   notifiedTransitions: Record<string, true>;
+  moods: Record<string, number>; // dia -> humor de 1 (muito mal) a 5 (ótimo)
   log: Record<string, DoseStatus>;
   snooze: Record<string, number>;
   lastNotified: Record<string, number>;
@@ -69,7 +70,7 @@ export type Dose = { id: string; med: Med; time: string; at: number; status: Dos
 export const KEY = "foco-e-rotina:v1";
 export const REPEAT_MIN = 10; // repete o lembrete a cada 10 min até confirmar
 
-export const emptyState = (): State => ({ profile: null, weights: [], water: {}, meals: {}, meds: [], tasks: [], taskDone: {}, stepDone: {}, lowEnergy: {}, focus: null, focusLog: {}, subjects: [], studyLog: {}, studyTasks: [], onboarded: false, thoughts: [], reviews: {}, starts: {}, notifiedTransitions: {}, log: {}, snooze: {}, lastNotified: {} });
+export const emptyState = (): State => ({ profile: null, weights: [], water: {}, meals: {}, meds: [], tasks: [], taskDone: {}, stepDone: {}, lowEnergy: {}, focus: null, focusLog: {}, subjects: [], studyLog: {}, studyTasks: [], onboarded: false, thoughts: [], reviews: {}, starts: {}, notifiedTransitions: {}, moods: {}, log: {}, snooze: {}, lastNotified: {} });
 
 export function loadState(): State {
   try {
@@ -250,6 +251,7 @@ export function doneOn(s: State, day: string): string[] {
   if ((s.meals[day] ?? []).length) out.push("🍽️ Registrou o que comeu");
   if (s.weights.some((w) => w.date === day)) out.push("⚖️ Registrou o peso");
   for (const t of s.thoughts) if (t.done && t.doneAt === day) out.push(`✨ ${t.text}`);
+  if (s.moods?.[day]) out.push("💛 Percebeu como está se sentindo");
   if (s.starts[day]) out.push(`🚀 Começou ${s.starts[day] === 1 ? "uma coisa difícil" : `${s.starts[day]} coisas difíceis`}`);
   return out;
 }

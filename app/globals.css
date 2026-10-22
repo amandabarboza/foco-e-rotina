@@ -2,69 +2,117 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Tema "deserto": céu verde-água no topo, areia embaixo, cartões de papel creme. */
 :root {
-  --bg: #fbf6f4;
-  --card: #ffffff;
-  --ink: #3a2e3f;
-  --muted: #6b5c70;
-  --accent: #a8406b;
-  --accent-ink: #ffffff;
-  --soft: #fbe7ee;
-  --warm: #fdecd9;
-  --line: #f0e2e6;
-  --med: #6d50bf;
-  --med-soft: #efe9fb;
-  --water: #2b6fa6;
-  --water-soft: #e5f1fb;
-  --food: #a8502a;
-  --food-soft: #fdeee5;
-  --study: #2f7352;
-  --study-soft: #e6f4ec;
-  --weight: #a83f72;
-  --weight-soft: #fbe8f1;
-  --hero: linear-gradient(135deg, #f9cddb 0%, #e9d8f8 55%, #fde3d2 100%);
-  --shadow: 0 10px 30px -18px rgba(194, 87, 127, 0.45);
-  --on-color: #ffffff; /* texto sobre botões coloridos */
+  --g1: #3d7f77;
+  --g2: #6fa894;
+  --g3: #e2d58c;
+  --g4: #f4e4a4;
+  --bg: #fbecb6; /* fundo de campos e áreas internas */
+  --card: #fff6d6;
+  --card-edge: #e2c477;
+  --card-shadow: #d4b45e;
+  --ink: #4a3222;
+  --muted: #76573a;
+  --accent: #a8461c;
+  --accent-ink: #fff6d6;
+  --soft: #fde7a2;
+  --warm: #ffd9a8;
+  --line: #ead39a;
+  --btn: #f7d35a;
+  --btn-edge: #4a3222;
+  --btn-ink: #4a3222;
+  --toggle: #e07b22;
+  --nav: #5a3a20;
+  --coin: #f3c65a;
+  --title: #ffffff;
+  --med: #6a4fb0;
+  --med-soft: #ece4fb;
+  --water: #2a6a98;
+  --water-soft: #dcecf6;
+  --food: #a14c1c;
+  --food-soft: #fde2c6;
+  --study: #2c6b4c;
+  --study-soft: #dcefdc;
+  --weight: #9c3a6a;
+  --weight-soft: #f9dfe9;
+  --on-color: #ffffff;
+  --sky1: #3d7f77;
+  --sky2: #8cc0a6;
+  --sun: #ffe9a3;
+  --dune1: #f1d98a;
+  --dune2: #e7c66a;
+  --dune3: #d9ad4f;
+  --pyr1: #e9b863;
+  --pyr2: #c98f3f;
+  --palm: #3f8a52;
+  --trunk: #8a5a32;
+  --hero: linear-gradient(135deg, #fff1c2, #fde3a0);
+  --shadow: 0 4px 0 var(--card-shadow);
 }
 @media (prefers-color-scheme: dark) {
+  /* Noite no deserto */
   :root {
-    --bg: #1b1520;
-    --card: #261e2b;
-    --ink: #f3e9f0;
-    --muted: #b3a6b8;
-    --accent: #f08bb0;
-    --accent-ink: #2a1020;
-    --soft: #3a2433;
-    --warm: #3b2c22;
-    --line: #3a2f40;
+    --g1: #15212b;
+    --g2: #1f3340;
+    --g3: #2c2c2a;
+    --g4: #2a241c;
+    --bg: #26221b;
+    --card: #2f2a22;
+    --card-edge: #5c4a2c;
+    --card-shadow: #1c1914;
+    --ink: #f6ebc8;
+    --muted: #d1bf94;
+    --accent: #f5b16a;
+    --accent-ink: #2a1c10;
+    --soft: #3d3424;
+    --warm: #4a3520;
+    --line: #4a3f2c;
+    --btn: #f3c65a;
+    --btn-edge: #1c140c;
+    --btn-ink: #2a1c10;
+    --toggle: #f08a35;
+    --nav: #2a1a0e;
+    --coin: #d9a93f;
     --med: #b9a2f2;
-    --med-soft: #2d2540;
-    --water: #7cbcec;
+    --med-soft: #2f2840;
+    --water: #86c3ee;
     --water-soft: #1d2c3a;
-    --food: #f4a57f;
-    --food-soft: #3a2a22;
+    --food: #f2a676;
+    --food-soft: #3a2a1e;
     --study: #8fd0aa;
     --study-soft: #1f3229;
     --weight: #f29ac2;
     --weight-soft: #3a2231;
-    --hero: linear-gradient(135deg, #4a2a40 0%, #33284a 55%, #4a3328 100%);
-    --shadow: 0 10px 30px -18px rgba(0, 0, 0, 0.8);
     --on-color: #1b1520;
+    --sky1: #13202b;
+    --sky2: #2b4150;
+    --sun: #f3ecd0;
+    --dune1: #5b4a33;
+    --dune2: #4a3b28;
+    --dune3: #3a2e1f;
+    --pyr1: #6e5434;
+    --pyr2: #4f3b23;
+    --palm: #2f5a3a;
+    --trunk: #5a3d24;
+    --hero: linear-gradient(135deg, #3a3020, #2f2a22);
   }
 }
 
-html, body { background: var(--bg); color: var(--ink); }
-html { font-size: 106.25%; overflow-x: clip; }
+html { font-size: 106.25%; overflow-x: clip; background: var(--g4); color: var(--ink); }
 /* No iPhone, segue o tamanho de texto escolhido em Ajustes > Tela e Brilho (Dynamic Type). */
 @supports (font: -apple-system-body) {
   html { font: -apple-system-body; }
 }
 body {
+  min-height: 100dvh;
+  background: linear-gradient(180deg, var(--g1) 0, var(--g2) 150px, var(--g3) 400px, var(--g4) 680px) no-repeat, var(--g4);
+  color: var(--ink);
   font-family: "Nunito Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 1rem;
   line-height: 1.45;
   overflow-wrap: anywhere;
-  padding: env(safe-area-inset-top) 16px calc(112px + env(safe-area-inset-bottom));
+  padding: env(safe-area-inset-top) 16px calc(118px + env(safe-area-inset-bottom));
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: transparent;
 }
@@ -73,20 +121,42 @@ body {
 
 @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 .rise { animation: rise .35s ease-out both; }
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+.bob { animation: bob 3s ease-in-out infinite; }
 
 @layer components {
-  .card { @apply my-3 rounded-[24px] border border-line bg-card p-[18px]; box-shadow: var(--shadow); }
+  .card {
+    @apply my-3 rounded-[22px] border-2 border-[var(--card-edge)] bg-card p-[18px];
+    box-shadow: var(--shadow);
+  }
   .hero { background: var(--hero); }
   .btn {
-    @apply mt-3 flex min-h-[54px] w-full items-center justify-center gap-2 rounded-full border-0 bg-accent px-5 font-bold text-accent-ink transition active:scale-[.98] disabled:opacity-40;
-    box-shadow: 0 8px 20px -12px var(--accent);
+    @apply mt-3 flex min-h-[54px] w-full items-center justify-center gap-2 rounded-[18px] border-2 border-[var(--btn-edge)] bg-[var(--btn)] px-5 font-black tracking-wide text-[var(--btn-ink)] transition active:translate-y-[2px] disabled:opacity-40;
+    box-shadow: 0 4px 0 var(--btn-edge);
   }
-  .btn-secondary { @apply border-2 border-line bg-card text-ink; box-shadow: none; }
+  .btn:active { box-shadow: 0 2px 0 var(--btn-edge); }
+  .btn-secondary {
+    @apply border-[var(--card-edge)] bg-card text-ink;
+    box-shadow: 0 3px 0 var(--card-shadow);
+  }
+  .btn-secondary:active { box-shadow: 0 1px 0 var(--card-shadow); }
   .btn-small { @apply mr-1.5 mt-1.5 inline-flex min-h-[44px] w-auto px-4 text-[.95rem]; }
-  .pill { @apply rounded-full bg-soft px-3 py-0.5 text-sm; }
-  .field { @apply min-h-[50px] w-full rounded-2xl border-2 border-line bg-bg px-4 text-ink; }
-  .label { @apply mt-4 block text-[.95rem] font-bold; }
-  .h1 { @apply text-[1.8rem] font-extrabold leading-tight tracking-tight; }
-  .h2 { @apply mb-1 mt-7 flex items-center gap-2 text-lg font-extrabold; }
+  .pill { @apply rounded-full border border-[var(--card-edge)] bg-soft px-3 py-0.5 text-sm; }
+  .field { @apply min-h-[50px] w-full rounded-2xl border-2 border-[var(--card-edge)] bg-bg px-4 text-ink; }
+  .label { @apply mt-4 block text-[.95rem] font-extrabold; }
+  .display { font-family: "Lilita One", "Nunito Variable", sans-serif; font-weight: 400; letter-spacing: .01em; }
+  .h1 {
+    @apply text-[2.1rem] leading-tight;
+    font-family: "Lilita One", "Nunito Variable", sans-serif;
+    font-weight: 400;
+    color: var(--title);
+    text-shadow: 0 2px 0 rgba(40, 25, 10, 0.25);
+  }
+  /* Dentro de cartões e janelas, o título volta a ser escuro. */
+  .card .h1, [role="dialog"] .h1 { color: var(--ink); text-shadow: none; }
+  .h2 {
+    @apply mb-1 mt-7 inline-flex items-center gap-2 rounded-full border-2 border-[var(--card-edge)] bg-card px-3.5 py-1 text-base font-black;
+    box-shadow: 0 3px 0 var(--card-shadow);
+  }
   .muted { @apply text-sm text-muted; }
 }

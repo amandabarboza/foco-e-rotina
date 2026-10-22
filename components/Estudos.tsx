@@ -94,7 +94,7 @@ function Home({ state, update }: Props) {
         </div>
       </div>
 
-      <div className="card border-0 bg-study-soft">
+      <div className="card bg-study-soft">
         <p className="flex items-center gap-2 text-lg font-bold text-study"><Play size={20} /> Estudar agora</p>
         <p className="label !mt-2">Matéria</p>
         <div className="mt-2 flex flex-wrap gap-2">
@@ -107,7 +107,7 @@ function Home({ state, update }: Props) {
         </div>
         <p className="label">Por quanto tempo</p>
         <Chips options={FOCUS_MIN} value={focusMin} onChange={setFocusMin} render={(x) => `${x} min`} />
-        <button className="btn !bg-study !text-[var(--on-color)]" onClick={start}><Play size={20} /> Começar {focusMin} min</button>
+        <button className="btn" onClick={start}><Play size={20} /> Começar {focusMin} min</button>
         <p className="muted mt-2">Travou para começar? Escolha 15 min e só abra o material. Às vezes isso basta.</p>
       </div>
 
@@ -180,7 +180,7 @@ function SubjectSheet({ subject, state, update, onClose }: Props & { subject: Su
       <p className="label">Meta por semana</p>
       <Stepper label="Meta semanal" value={s.weeklyGoalMin} onChange={(weeklyGoalMin) => setS({ ...s, weeklyGoalMin })} step={30} min={30} max={2400} unit="min" />
       <p className="muted mt-1">{fmtMin(s.weeklyGoalMin)} por semana ≈ {Math.round(s.weeklyGoalMin / 5)} min por dia útil.</p>
-      <button className="btn !bg-study !text-[var(--on-color)]" disabled={!s.name.trim()} onClick={() => {
+      <button className="btn" disabled={!s.name.trim()} onClick={() => {
         update((st) => ({ ...st, subjects: isNew ? [...st.subjects, { ...s, name: s.name.trim() }] : st.subjects.map((x) => (x.id === s.id ? { ...s, name: s.name.trim() } : x)) }));
         onClose();
       }}>Salvar</button>
@@ -213,7 +213,7 @@ function TaskSheet({ task, state, update, onClose }: Props & { task: StudyTask; 
       )}
       <label className="label" htmlFor="st-due">Data</label>
       <input id="st-due" type="date" className="field" value={t.due} onChange={(e) => setT({ ...t, due: e.target.value })} />
-      <button className="btn !bg-study !text-[var(--on-color)]" disabled={!t.title.trim() || !t.due} onClick={() => {
+      <button className="btn" disabled={!t.title.trim() || !t.due} onClick={() => {
         update((s) => ({ ...s, studyTasks: isNew ? [...s.studyTasks, { ...t, title: t.title.trim() }] : s.studyTasks.map((x) => (x.id === t.id ? { ...t, title: t.title.trim() } : x)) }));
         onClose();
       }}>Salvar</button>
@@ -259,19 +259,19 @@ function Timer({ state, update }: Props) {
     return (
       <>
         <h1 className="h1 pt-2">{f.phase === "focus" ? "Bloco concluído 🎉" : "Pausa concluída"}</h1>
-        <div className="card bg-study-soft border-0 text-center">
+        <div className="card bg-study-soft text-center">
           {f.phase === "focus" ? (
             <>
               <p className="text-lg">Você estudou <b>{f.minutes} min</b> de {f.label}.</p>
               <p className="label">Pausa de</p>
               <Chips options={BREAK_MIN} value={breakMin} onChange={setBreakMin} render={(x) => `${x} min`} />
-              <button className="btn !bg-study !text-[var(--on-color)]" onClick={() => (unlockAudio(), close({ ...f, phase: "break", minutes: breakMin, endsAt: Date.now() + breakMin * 60000 }))}>Começar pausa</button>
+              <button className="btn" onClick={() => (unlockAudio(), close({ ...f, phase: "break", minutes: breakMin, endsAt: Date.now() + breakMin * 60000 }))}>Começar pausa</button>
               <button className="btn btn-secondary" onClick={() => close(null)}>Parar por agora</button>
             </>
           ) : (
             <>
               <p className="text-lg">Pronta para mais um bloco?</p>
-              <button className="btn !bg-study !text-[var(--on-color)]" onClick={() => (unlockAudio(), close({ ...f, phase: "focus", minutes: 25, endsAt: Date.now() + 25 * 60000 }))}>Mais 25 min de {f.label}</button>
+              <button className="btn" onClick={() => (unlockAudio(), close({ ...f, phase: "focus", minutes: 25, endsAt: Date.now() + 25 * 60000 }))}>Mais 25 min de {f.label}</button>
               <button className="btn btn-secondary" onClick={() => close(null)}>Parar por hoje</button>
             </>
           )}
@@ -292,7 +292,7 @@ function Timer({ state, update }: Props) {
     <>
       <p className="muted pt-2">{f.phase === "focus" ? "Estudando" : "Pausa"}</p>
       <h1 className="h1 flex items-center gap-2"><BookOpen size={26} /> {f.phase === "focus" ? f.label : "Respira 🌿"}</h1>
-      <div className="card flex flex-col items-center border-0 bg-study-soft py-8">
+      <div className="card flex flex-col items-center bg-study-soft py-8">
         <Ring pct={pct} color="var(--study)" size={240} stroke={18}>
           <span className="block text-5xl font-bold tabular-nums">{fmtClock(left)}</span>
           <span className="block text-sm text-muted">{f.endsAt ? "restantes" : "pausado"}</span>
@@ -303,9 +303,9 @@ function Timer({ state, update }: Props) {
         {f.phase === "break" && <p className="mt-4 text-center">Levanta, bebe água, olha pela janela.</p>}
       </div>
       {f.endsAt ? (
-        <button className="btn !bg-study !text-[var(--on-color)]" onClick={() => update((s) => ({ ...s, focus: { ...f, endsAt: null, leftMs: left } }))}><Pause size={20} /> Pausar</button>
+        <button className="btn" onClick={() => update((s) => ({ ...s, focus: { ...f, endsAt: null, leftMs: left } }))}><Pause size={20} /> Pausar</button>
       ) : (
-        <button className="btn !bg-study !text-[var(--on-color)]" onClick={() => update((s) => ({ ...s, focus: { ...f, endsAt: Date.now() + f.leftMs } }))}><Play size={20} /> Continuar</button>
+        <button className="btn" onClick={() => update((s) => ({ ...s, focus: { ...f, endsAt: Date.now() + f.leftMs } }))}><Play size={20} /> Continuar</button>
       )}
       <button className="btn btn-secondary" onClick={stop}><Square size={18} /> Encerrar</button>
       <p className="muted mt-3">No iPhone, o som do fim só toca com o app aberto. Se sair, ao voltar o tempo estará certo.</p>

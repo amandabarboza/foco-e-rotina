@@ -25,7 +25,7 @@ export default function CabecaCard({ state, update }: Props) {
       <p className="flex items-center gap-2 text-lg font-extrabold"><Brain size={20} className="text-med" /> Cabeça cheia?</p>
       <p className="muted">Tire tudo da cabeça sem organizar. Depois a gente separa junto.</p>
       <div className="mt-1 grid grid-cols-2 gap-2">
-        <button className="btn !bg-med !text-[var(--on-color)]" onClick={() => setCapture(true)}>Despejar</button>
+        <button className="btn" onClick={() => setCapture(true)}>Despejar</button>
         <button className="btn btn-secondary" disabled={!untriaged.length} onClick={() => setTriage(true)}>
           Organizar{untriaged.length ? ` (${untriaged.length})` : ""}
         </button>
@@ -78,7 +78,7 @@ function CaptureSheet({ update, onClose, onDone }: Pick<Props, "update"> & { onC
       <textarea autoFocus rows={8} className="field mt-3 py-3" value={text} onChange={(e) => setText(e.target.value)} aria-label="Pensamentos, um por linha"
         placeholder={"pagar o boleto\nresponder a professora\ncomprar ração\nmarcar dentista"} />
       <p className="muted mt-1">{lines.length} {lines.length === 1 ? "item" : "itens"}</p>
-      <button className="btn !bg-med !text-[var(--on-color)]" disabled={!lines.length} onClick={() => save(true)}>Salvar e organizar</button>
+      <button className="btn" disabled={!lines.length} onClick={() => save(true)}>Salvar e organizar</button>
       <button className="btn btn-secondary" disabled={!lines.length} onClick={() => save(false)}>Só salvar (organizo depois)</button>
     </Sheet>
   );
@@ -102,7 +102,7 @@ function TriageSheet({ state, update, onClose }: Props & { onClose: () => void }
       {t ? (
         <div className="rise" key={t.id}>
           <p className="mt-3 text-center text-sm font-bold text-muted">Faltam {total}</p>
-          <div className="card hero border-0 py-8 text-center"><p className="text-2xl font-extrabold">{t.text}</p></div>
+          <div className="card hero py-8 text-center"><p className="text-2xl font-extrabold">{t.text}</p></div>
           <p className="text-center font-bold">Quando isso precisa acontecer?</p>
           <button className="btn" onClick={() => setThought(update, t.id, { bucket: "hoje", created: dayKey() })}>☀️ Hoje</button>
           <button className="btn btn-secondary" onClick={() => setThought(update, t.id, { bucket: "depois" })}>🗓️ Outro dia</button>

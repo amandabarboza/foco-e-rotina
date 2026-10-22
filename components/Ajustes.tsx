@@ -37,11 +37,11 @@ export default function Ajustes({ state, replaceAll, update }: Props) {
       <h1 className="h1 pt-2">Ajustes</h1>
 
       <h2 className="h2"><CalendarPlus size={20} /> Alarmes no Calendário do iPhone</h2>
-      <p className="muted">O jeito mais confiável: o iPhone toca mesmo com o app fechado. Baixe o arquivo e toque em “Adicionar tudo”.</p>
       <div className="card">
+        <p className="muted mb-3">O jeito mais confiável: o iPhone toca mesmo com o app fechado. Baixe o arquivo e toque em “Adicionar tudo”.</p>
         <p className="flex items-center gap-2 font-semibold text-med"><Pill size={18} /> Remédios</p>
         <p className="muted">{state.meds.length ? `${state.meds.length} remédio(s), com um segundo aviso 10 min depois.` : "Cadastre remédios em Rotina primeiro."}</p>
-        <button className="btn !bg-med !text-[var(--on-color)]" disabled={!state.meds.length} onClick={() => download("remedios.ics", "text/calendar", buildICS(state))}>
+        <button className="btn" disabled={!state.meds.length} onClick={() => download("remedios.ics", "text/calendar", buildICS(state))}>
           Gerar alarmes de remédios
         </button>
       </div>
@@ -53,7 +53,7 @@ export default function Ajustes({ state, replaceAll, update }: Props) {
         </div>
         <p className="label">A cada</p>
         <Chips options={[1, 2, 3]} value={wEvery} onChange={setWEvery} render={(h) => `${h} h`} />
-        <button className="btn !bg-water !text-[var(--on-color)]" onClick={() => {
+        <button className="btn" onClick={() => {
           if (!wFrom || !wTo || wFrom > wTo) return alert("Confira os horários: o início deve ser antes do fim.");
           download("agua.ics", "text/calendar", buildWaterICS(wFrom, wTo, wEvery));
         }}>Gerar lembretes de água</button>

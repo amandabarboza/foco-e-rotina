@@ -9,6 +9,8 @@ import { Ring, fmtNum } from "./ui";
 import Arranque from "./Arranque";
 import CabecaCard from "./Cabeca";
 import Calma from "./Calma";
+import Cenario from "./Cenario";
+import Humor from "./Humor";
 import Conquistas from "./Conquistas";
 import { RevisaoCard, weekFocus } from "./Revisao";
 
@@ -59,21 +61,18 @@ export default function Inicio({ state, update, mark, snooze, go }: Props) {
 
   return (
     <>
-      <section className="hero rise -mx-[16px] -mt-[calc(8px+env(safe-area-inset-top))] rounded-b-[36px] px-5 pb-6 pt-[calc(20px+env(safe-area-inset-top))]">
-        <p className="text-sm font-semibold opacity-70">{date}</p>
-        <h1 className="h1 mt-1">{greeting()}{name ? `, ${name}` : ""} 🌷</h1>
-        <p className="mt-1 opacity-80">{phrase}</p>
-        <div className="mt-4 grid grid-cols-2 gap-2">
-          <button onClick={() => setArranque(true)}
-            className="flex min-h-[56px] items-center justify-center gap-2 rounded-2xl bg-card/85 px-3 font-bold shadow-sm backdrop-blur active:scale-[.98]">
-            <Rocket size={20} className="text-accent" /> Só 2 minutos
-          </button>
-          <button onClick={() => setCalma(true)}
-            className="flex min-h-[56px] items-center justify-center gap-2 rounded-2xl bg-card/85 px-3 font-bold shadow-sm backdrop-blur active:scale-[.98]">
-            <Wind size={20} className="text-med" /> Modo calma
-          </button>
+      <section className="relative -mx-[16px] -mt-[calc(8px+env(safe-area-inset-top))] h-[270px] overflow-hidden rounded-b-[34px] border-b-4 border-[#3b2414]">
+        <Cenario />
+        <div className="relative px-5 pt-[calc(18px+env(safe-area-inset-top))]">
+          <p className="text-sm font-bold text-white/90 [text-shadow:0_1px_2px_rgba(0,0,0,.3)]">{date}</p>
+          <h1 className="h1 mt-0.5">{greeting()}{name ? `, ${name}` : ""}</h1>
+          <p className="mt-1 max-w-[16rem] font-semibold text-white [text-shadow:0_1px_2px_rgba(0,0,0,.35)]">{phrase}</p>
         </div>
       </section>
+      <div className="relative z-10 -mt-8 grid grid-cols-2 gap-3 px-1">
+        <button onClick={() => setArranque(true)} className="btn !mt-0"><Rocket size={20} /> Só 2 min</button>
+        <button onClick={() => setCalma(true)} className="btn btn-secondary !mt-0"><Wind size={20} /> Calma</button>
+      </div>
 
       {focus && (
         <div className="card flex items-center gap-3 !py-3">
@@ -83,18 +82,19 @@ export default function Inicio({ state, update, mark, snooze, go }: Props) {
       )}
 
       <button onClick={toggleLow} aria-pressed={low}
-        className={`mt-3 flex min-h-[52px] w-full items-center gap-3 rounded-[24px] px-4 text-left transition ${low ? "bg-warm" : "border-2 border-dashed border-line"}`}>
+        className={`mt-4 flex min-h-[52px] w-full items-center gap-3 rounded-[22px] border-2 px-4 py-2 text-left transition ${low ? "border-[var(--btn-edge)] bg-warm" : "border-dashed border-[var(--card-edge)] bg-card/70"}`}>
         <BatteryLow size={22} className={low ? "text-food" : "text-muted"} />
         <span className="flex-1">
           <span className="block font-bold">{low ? "Modo baixa energia ligado" : "Dia difícil? Modo baixa energia"}</span>
           <span className="muted block">{low ? "Só o essencial hoje. Toque para desligar." : "Mostra só o essencial."}</span>
         </span>
-        <span className={`h-7 w-12 shrink-0 rounded-full p-1 transition ${low ? "bg-accent" : "bg-line"}`}>
-          <span className={`block h-5 w-5 rounded-full bg-card shadow transition ${low ? "translate-x-5" : ""}`} />
+        <span className={`h-8 w-14 shrink-0 rounded-full border-2 border-[#3b2414] p-[3px] transition ${low ? "bg-[var(--toggle)]" : "bg-line"}`}>
+          <span className={`block h-[22px] w-[22px] rounded-full border-2 border-[#3b2414] bg-[#fff6d6] transition ${low ? "translate-x-6" : ""}`} />
         </span>
       </button>
 
       <NowCard state={state} update={update} mark={mark} snooze={snooze} go={go} />
+      <Humor state={state} update={update} />
       <CabecaCard state={state} update={update} />
       <Tiles state={state} update={update} go={go} />
       <RevisaoCard state={state} update={update} />
@@ -121,7 +121,7 @@ function NowCard({ state, update, mark, snooze, go }: Props) {
   if (!state.meds.length && !state.tasks.length) {
     return (
       <div className="card bg-soft">
-        <p className="text-lg font-bold">Comece pela sua rotina</p>
+        <p className="display text-2xl">Comece pela sua rotina</p>
         <p className="mt-1">Cadastre remédios e tarefas da casa. Aqui vai aparecer sempre <b>só a próxima coisa</b> a fazer.</p>
         <button className="btn" onClick={() => go("rotina")}>Montar minha rotina <ChevronRight size={20} /></button>
       </div>
@@ -131,12 +131,12 @@ function NowCard({ state, update, mark, snooze, go }: Props) {
   if (due) {
     const late = Date.now() - due.at > 30 * 60000;
     return (
-      <div className={`card border-0 ${late ? "bg-warm" : "bg-med-soft"}`}>
+      <div className={`card ${late ? "bg-warm" : "bg-med-soft"}`}>
         <p className="flex items-center gap-2 font-semibold text-med"><Pill size={18} /> Agora · remédio das {due.time}</p>
-        <p className="mt-1 text-3xl font-bold">{due.med.name}</p>
+        <p className="display mt-1 text-4xl">{due.med.name}</p>
         {due.med.dose && <p className="text-lg">{due.med.dose}</p>}
         {late && <p className="muted mt-1">Sem pressa, ainda dá tempo.</p>}
-        <button className="btn !bg-med" onClick={() => mark(due.id, "taken")}><Check size={22} /> Tomei</button>
+        <button className="btn" onClick={() => mark(due.id, "taken")}><Check size={22} /> Tomei</button>
         <div className="grid grid-cols-2 gap-2">
           <button className="btn btn-secondary" onClick={() => snooze(due.id)}>Adiar {REPEAT_MIN} min</button>
           <button className="btn btn-secondary" onClick={() => mark(due.id, "skipped")}>Pular hoje</button>
@@ -157,9 +157,9 @@ function NowCard({ state, update, mark, snooze, go }: Props) {
       });
     const doneSteps = t.steps.filter((_, i) => state.stepDone[stepKey(i)]).length;
     return (
-      <div className="card border-0 bg-soft">
+      <div className="card bg-soft">
         <p className="flex items-center gap-2 font-semibold text-accent"><HouseIcon size={18} /> Agora{t.time ? ` · ${t.time}` : ""}</p>
-        <p className="mt-1 text-3xl font-bold">{t.name}</p>
+        <p className="display mt-1 text-4xl">{t.name}</p>
         {t.steps.length > 0 && (
           <>
             <p className="muted">{doneSteps} de {t.steps.length} passos · um de cada vez</p>
@@ -169,8 +169,8 @@ function NowCard({ state, update, mark, snooze, go }: Props) {
                 return (
                   <li key={i}>
                     <button onClick={() => toggleStep(i)} aria-pressed={on}
-                      className={`flex min-h-[52px] w-full items-center gap-3 rounded-xl bg-card px-3 text-left ${on ? "opacity-60" : ""}`}>
-                      <span className={`grid h-7 w-7 shrink-0 place-items-center rounded-full border-2 ${on ? "border-accent bg-accent text-accent-ink" : "border-line"}`}>
+                      className={`flex min-h-[52px] w-full items-center gap-3 rounded-2xl border-2 border-[var(--card-edge)] bg-card px-3 text-left ${on ? "opacity-60" : ""}`}>
+                      <span className={`grid h-7 w-7 shrink-0 place-items-center rounded-full border-2 ${on ? "border-[#3b2414] bg-[var(--toggle)] text-[#fff6d6]" : "border-[var(--card-edge)]"}`}>
                         {on && <Check size={16} />}
                       </span>
                       <span className={on ? "line-through" : ""}>{step}</span>
@@ -195,9 +195,9 @@ function NowCard({ state, update, mark, snooze, go }: Props) {
   const left = todayDoses(state).filter((d) => !d.status).length +
     todayTasks(state).filter((t) => !t.done && (!low || t.task.essential)).length;
   return (
-    <div className="card border-0 bg-soft text-center">
+    <div className="card bg-soft text-center">
       <p className="text-4xl" aria-hidden>{left ? "🌿" : "🎉"}</p>
-      <p className="mt-1 text-2xl font-bold">{left ? "Nada para agora" : "Tudo feito por hoje!"}</p>
+      <p className="display mt-1 text-3xl">{left ? "Nada para agora" : "Tudo feito por hoje!"}</p>
       {upcoming && <p className="mt-1">Próximo remédio: <b>{upcoming.med.name}</b> às {upcoming.time}</p>}
       <p className="muted mt-1">Pode descansar ou fazer o que quiser.</p>
     </div>

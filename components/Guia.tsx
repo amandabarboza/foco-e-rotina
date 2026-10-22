@@ -63,9 +63,9 @@ export default function Guia({ state, update, onBack }: Props) {
 
   return (
     <>
-      <button onClick={onBack} className="mt-2 flex min-h-[44px] items-center gap-1 font-semibold text-accent"><ChevronLeft size={20} /> Corpo</button>
+      <button onClick={onBack} className="mt-2 flex min-h-[44px] items-center gap-1 font-bold text-white"><ChevronLeft size={20} /> Corpo</button>
       <h1 className="h1">Guia de reeducação alimentar</h1>
-      <p className="mt-1 text-muted">Reeducar é mudar aos poucos, não fazer dieta perfeita. Escolha <b>uma</b> coisa por semana para ajustar.</p>
+      <p className="card !py-3">Reeducar é mudar aos poucos, não fazer dieta perfeita. Escolha <b>uma</b> coisa por semana para ajustar.</p>
 
       <h2 className="h2">1. Seu número do dia</h2>
       <div className="card">

@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "@fontsource-variable/nunito";
+import "@fontsource/lilita-one/latin-400.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -14,8 +15,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   viewportFit: "cover",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fbf6f4" },
-    { media: "(prefers-color-scheme: dark)", color: "#1b1520" },
+    { media: "(prefers-color-scheme: light)", color: "#3d7f77" },
+    { media: "(prefers-color-scheme: dark)", color: "#15212b" },
   ],
 };
 
